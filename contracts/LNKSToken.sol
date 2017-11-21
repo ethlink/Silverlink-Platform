@@ -1,7 +1,7 @@
 pragma solidity ^0.4.8;
 
-/// @title Link Token. This Token will remain the cornerstone of the entire organization. It will have an Ethereum address and from the moment that address is publish until the end, it will remain the same, and should. The Token should be as simple as it possibly can be and should not be able to terminate. It's state remains so that those who control their Tokens will continue to do so.
-/// @author Riaan F Venter~ RFVenter~ <msg@rfv.io>
+/// @title LNKS Token. This Token will remain the cornerstone of the entire organization. It will have an Ethereum address and from the moment that address is publish until the end, it will remain the same, and should. The Token should be as simple as it possibly can be and should not be able to terminate. It's state remains so that those who control their Tokens will continue to do so.
+/// @author Karolis Ramanauskas <hello@karolisram.com>
 
 import "./SafeMath.sol";
 import "./OwnableMultiple.sol";
@@ -32,6 +32,7 @@ contract StandardToken is ERC20 {
     require(msg.data.length < size + 4);
     _;
   }
+
 
   function balanceOf(address _owner) constant returns (uint balance) {
     return balances[_owner];
@@ -78,23 +79,17 @@ contract StandardToken is ERC20 {
 
 
 contract LNKSToken is StandardToken, OwnableMultiple {
-  string public   name =           "Link Platform";    // Name of the Token
-  string public   symbol =         "LNKS";              // ERC20 compliant Token code
-  uint public     decimals =       18;                 // Token has 18 digit precision
+  string public constant name = "Link Platform"; // Name of the Token
+  string public constant symbol = "LNKS"; // ERC20 compliant Token code
+  uint public constant decimals = 3; // Token has 3 digit precision
 
   function mint(address _spender, uint _value) onlyOwner {
-      balances[_spender] += _value;
-      supply += _value;
+    balances[_spender] += _value;
+    supply += _value;
   }
 
-  // Should I simply let these tokens vanish?
-  // DestroyTokens event will register the event
-  // we can record it happened and send person
-  // his silver certificate.
   function destroyTokens(uint _value) external {
-    //address vault = address(vaultContract);
-    //balances[vault] = balances[vault].sub(_value);
-
+    balances[msg.sender] = balances[msg.sender].sub(_value);
     supply = supply.sub(_value);
 
     DestroyTokens(msg.sender, _value);

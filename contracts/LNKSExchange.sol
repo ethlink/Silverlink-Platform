@@ -1,10 +1,12 @@
 pragma solidity ^0.4.8;
 
+import "./SafeMath.sol";
 import './OwnableMultiple.sol';
 import './LNKSToken.sol';
 
 
 contract LNKSExchange is OwnableMultiple {
+  using SafeMath for uint;
 
   struct Order {
     address buyer;
@@ -12,6 +14,7 @@ contract LNKSExchange is OwnableMultiple {
   }
 
   LNKSToken token;
+  mapping(address => bool) usedAddresses;
   Order[] orders;
 
   function LNKSExchange() {}
@@ -29,6 +32,7 @@ contract LNKSExchange is OwnableMultiple {
     });
 
     orders.push(order);
+    usedAddresses[msg.sender] = true;
 
     BuyDirectEvent(order.buyer, order.amount);
   }
@@ -38,8 +42,14 @@ contract LNKSExchange is OwnableMultiple {
     return (order.buyer, order.amount);
   }
 
-  function approveOrder(uint _index, uint _tokensAmount) public onlyOwner {
+  function approveOrder(uint _index, uint _tokensAmount, uint _fee) public onlyOwner {
     require(orders[_index].amount > 0);
+
+    // Deduct $10 if address is never used
+    if (usedAddresses[msg.sender] == false) {
+      _tokensAmount = _tokensAmount.sub(_fee);
+      usedAddresses[msg.sender] == true;
+    }
 
     Order memory order = orders[_index];
 
