@@ -14,10 +14,13 @@ contract LNKSExchange is OwnableMultiple {
   }
 
   LNKSToken token;
+  uint fee;
   mapping(address => bool) usedAddresses;
   Order[] orders;
 
-  function LNKSExchange() {}
+  function LNKSExchange() {
+    fee = 30000000000000000; // 0.03 eth
+  }
 
   function setTokenAddress(address _tokenAddress) public onlyOwner {
     token = LNKSToken(_tokenAddress);
@@ -42,12 +45,12 @@ contract LNKSExchange is OwnableMultiple {
     return (order.buyer, order.amount);
   }
 
-  function approveOrder(uint _index, uint _tokensAmount, uint _fee) public onlyOwner {
+  function approveOrder(uint _index, uint _tokensAmount) public onlyOwner {
     require(orders[_index].amount > 0);
 
     // Deduct $10 if address is never used
     if (usedAddresses[msg.sender] == false) {
-      _tokensAmount = _tokensAmount.sub(_fee);
+      _tokensAmount = _tokensAmount.sub(fee);
       usedAddresses[msg.sender] == true;
     }
 
@@ -59,6 +62,10 @@ contract LNKSExchange is OwnableMultiple {
     // remove order from orders array
     orders[_index] = orders[orders.length-1];
     orders.length--;
+  }
+
+  function setNewFee(uint _fee) public onlyOwner {
+    fee = _fee;
   }
 
   function getOrdersLength() public onlyOwner returns (uint) {
