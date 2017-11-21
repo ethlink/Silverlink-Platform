@@ -22,7 +22,7 @@ class Balance extends Component {
 	getBalance(LNKSToken) {
 		LNKSToken.deployed().then(token => {
 			token.balanceOf(this.props.account).then(balance => {
-				this.setState({balance: balance.toNumber()});
+				this.setState({balance: balance.toNumber() / 1000});
 			});			
 		});
 
