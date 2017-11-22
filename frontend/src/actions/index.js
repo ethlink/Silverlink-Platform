@@ -1,5 +1,6 @@
 import contract from 'truffle-contract';
 import LNKSTokenArtifact from '../contracts/LNKSToken.json';
+import LNKSExchangeArtifact from '../contracts/LNKSExchange.json';
 
 
 export function initWeb3(payload) {
@@ -9,12 +10,12 @@ export function initWeb3(payload) {
 
 	if (typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
 		provider = web3.currentProvider;
-		web3 = new Web3(provider);
+		let web3Initiated = new Web3(provider);
 
 		return {
 			type: 'INIT_WEB3',
 			payload: {
-				connected: true,
+				web3Initiated: web3Initiated,
 				web3: web3,
 				provider: provider,
 			}
@@ -24,7 +25,7 @@ export function initWeb3(payload) {
 	return {
 		type: 'INIT_WEB3',
 		payload: {
-			connected: false,
+			web3Initiated: null,
 			web3: null,
 			provider: null
 		}
@@ -42,12 +43,12 @@ export function initLNKSTokenContract(payload) {
 }
 
 export function initLNKSExchangeContract(payload) {
-	//let contractInstance = contract(GoFuckingDoItArtifact);
-	//contractInstance.setProvider(payload.provider);
+	let instance = contract(LNKSExchangeArtifact);
+	instance.setProvider(payload.provider);
 
 	return {
 		type: 'INIT_LNKS_EXCHANGE',
-		payload: {}
+		payload: instance
 	}
 }
 

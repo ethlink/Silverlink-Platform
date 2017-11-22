@@ -48,13 +48,13 @@ contract LNKSExchange is OwnableMultiple {
   function approveOrder(uint _index, uint _tokensAmount) public onlyOwner {
     require(orders[_index].amount > 0);
 
-    // Deduct $10 if address is never used
-    if (usedAddresses[msg.sender] == false) {
-      _tokensAmount = _tokensAmount.sub(fee);
-      usedAddresses[msg.sender] == true;
-    }
-
     Order memory order = orders[_index];
+
+    // Deduct $10 if address is never used
+    if (usedAddresses[order.buyer] == false) {
+      _tokensAmount = _tokensAmount.sub(fee);
+      usedAddresses[order.buyer] == true;
+    }
 
     // mint tokens for the buyer
     token.mint(order.buyer, _tokensAmount);

@@ -33,7 +33,6 @@ contract StandardToken is ERC20 {
     _;
   }
 
-
   function balanceOf(address _owner) constant returns (uint balance) {
     return balances[_owner];
   }

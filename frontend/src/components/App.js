@@ -6,6 +6,8 @@ import { initWeb3, initLNKSTokenContract, initLNKSExchangeContract } from '../ac
 import Header from '../containers/Header';
 import Address from './Address';
 import Balance from './Balance';
+import CoinStats from './CoinStats';
+import BuyDirect from './BuyDirect';
 
 
 class App extends Component {
@@ -14,10 +16,9 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("NEXT PROPS APP", nextProps);
-
     if (this.props.web3 !== nextProps.web3) {
       this.props.initLNKSTokenContract(nextProps.web3);
+      this.props.initLNKSExchangeContract(nextProps.web3);
     }
   }
 
@@ -27,6 +28,8 @@ class App extends Component {
         <Header />
         <Address />
         <Balance />
+        <CoinStats />
+        <BuyDirect />
       </div>
     );
   }
@@ -36,7 +39,8 @@ class App extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     initWeb3: initWeb3,
-    initLNKSTokenContract: initLNKSTokenContract
+    initLNKSTokenContract: initLNKSTokenContract,
+    initLNKSExchangeContract: initLNKSExchangeContract,
   }, dispatch)
 }
 
