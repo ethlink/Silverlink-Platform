@@ -25,3 +25,13 @@
 10. token.addOwner(exchange.address)
 11. exchange.approveOrder(0, 777)
 12. token.balanceOf(web3.eth.accounts[1])
+
+
+# Deployment on Rinkeby
+
+`truffle migrate --network rinkeby --reset`
+
+# Contracts
+
+- LNKSToken - https://rinkeby.etherscan.io/address/0x469e2b2f034636d1af70a7d05e57461482bd9204
+- LNKSExchange - https://rinkeby.etherscan.io/address/0x342b7b4aa230aa1dd669ae3b3b1b1987e92df1bd
