@@ -43,7 +43,7 @@ class BuyDirect extends Component {
 			exchange.buyDirect({
 				from: this.props.account,
 				value: this.props.web3.web3.toWei(this.state.amount, 'ether'),
-				gas: 100000
+				gas: 150000
 			}).then(receipt => {
 				this.setState({success: `Success! Transaction hash - ${receipt.tx}`});
 			}).catch(error => {
