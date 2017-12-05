@@ -22,6 +22,10 @@ contract LNKSExchange is OwnableMultiple {
     fee = 30000000000000000; // 0.03 eth
   }
 
+  function getFee() constant returns (uint) {
+    return fee;
+  }
+
   function setTokenAddress(address _tokenAddress) public onlyOwner {
     token = LNKSToken(_tokenAddress);
   }
@@ -40,7 +44,7 @@ contract LNKSExchange is OwnableMultiple {
     BuyDirectEvent(order.buyer, order.amount);
   }
 
-  function getOrder(uint _index) public onlyOwner returns (address, uint) {
+  function getOrder(uint _index) public constant onlyOwner returns (address, uint) {
     Order memory order = orders[_index];
     return (order.buyer, order.amount);
   }
@@ -68,14 +72,14 @@ contract LNKSExchange is OwnableMultiple {
     fee = _fee;
   }
 
-  function getOrdersLength() public onlyOwner returns (uint) {
+  function getOrdersLength() public constant onlyOwner returns (uint) {
     return orders.length;
   }
 
   /*
   * Fallback function in case someone accidentally sends Ether to the contract
    */
-  function() payable {}
+  function() public payable {}
 }
 
 

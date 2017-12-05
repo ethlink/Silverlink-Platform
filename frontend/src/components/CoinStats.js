@@ -27,7 +27,7 @@ class CoinStats extends Component {
 					supply: supply.toNumber(),
 					kilos: supply.toNumber() / 1000
 				});
-			});			
+			});
 		});
 
 		setTimeout(() => {

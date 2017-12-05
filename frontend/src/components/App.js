@@ -7,6 +7,7 @@ import Header from '../containers/Header';
 import Address from './Address';
 import Balance from './Balance';
 import CoinStats from './CoinStats';
+import ExchangeStats from './ExchangeStats';
 import BuyDirect from './BuyDirect';
 
 
@@ -29,6 +30,7 @@ class App extends Component {
         <Address />
         <Balance />
         <CoinStats />
+        <ExchangeStats />
         <BuyDirect />
       </div>
     );
