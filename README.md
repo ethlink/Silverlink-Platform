@@ -13,18 +13,27 @@
 
 # Test token
 
+## Setup
+
 1. LNKSToken.deployed().then(function(instance) {token=instance;})
 2. LNKSExchange.deployed().then(function(instance) {exchange=instance;})
 3. token.mint(web3.eth.accounts[0],100)
 4. exchange.setTokenAddress(token.address)
-5. exchange.buyDirect({from: web3.eth.accounts[1], value: web3.toWei(7.77, 'ether')})
-6. exchange.getOrdersLength.call()
-7. exchange.getOrder.call(0)
-8. Assume 1 ETH = 100 TOKENS (7.77 ETH = 777 TOKENS)
-9. token.addOwner(exchange.address)
-10. exchange.approveOrder(0, 777)
-11. token.balanceOf(web3.eth.accounts[1])
 
+## Buy direct
+
+1. exchange.buyDirect({from: web3.eth.accounts[1], value: web3.toWei(7.77, 'ether')})
+2. exchange.getOrdersLength.call()
+3. exchange.getOrder.call(0)
+4. Assume 1 ETH = 100 TOKENS (7.77 ETH = 777 TOKENS)
+5. token.addOwner(exchange.address)
+6. exchange.approveOrder(0, 777)
+7. token.balanceOf(web3.eth.accounts[1])
+
+## Redeem
+
+1. exchange.redeem(50)
+2. exchange.getRedemptionsLength()
 
 # Deployment on Rinkeby
 
