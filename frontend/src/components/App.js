@@ -9,6 +9,7 @@ import Balance from './Balance';
 import CoinStats from './CoinStats';
 import ExchangeStats from './ExchangeStats';
 import BuyDirect from './BuyDirect';
+import Redeem from './Redeem';
 
 
 class App extends Component {
@@ -32,6 +33,7 @@ class App extends Component {
         <CoinStats />
         <ExchangeStats />
         <BuyDirect />
+        <Redeem />
       </div>
     );
   }

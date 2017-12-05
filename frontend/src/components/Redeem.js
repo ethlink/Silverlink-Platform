@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 
-class BuyDirect extends Component {
+class Redeem extends Component {
 	constructor(props) {
 		super(props);
 
@@ -27,11 +27,12 @@ class BuyDirect extends Component {
 		this.props.LNKSExchange.deployed().then(exchange => {
 			console.log("Exchange address:", exchange.address);
 			
-			exchange.buyDirect({
+			exchange.redeem(this.state.amount*1000, {
 				from: this.props.account,
-				value: this.props.web3.web3.toWei(this.state.amount, 'ether'),
 				gas: 150000
 			}).then(receipt => {
+				console.log('receipt', receipt);
+
 				this.setState({success: `Success! Transaction hash - ${receipt.tx}`});
 			}).catch(error => {
 				this.setState({failure: error.message});
@@ -44,14 +45,14 @@ class BuyDirect extends Component {
 			<div className="balance container">
 				<div className="row">
 					<div className="col-xs-12">
-						<h2>Buy directly</h2>
+						<h2>Redeem tokens</h2>
 
 						<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
 						<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
 
 						<form onSubmit={this.handleSubmit}>
-							<input type="number" onChange={this.handleChange} value={this.state.amount} placeholder="Amount to buy" />
-							<button type="submit">Buy directly</button>
+							<input type="number" onChange={this.handleChange} value={this.state.amount} placeholder="Amount to redeem" />
+							<button type="submit">Redeem</button>
 						</form>
 					</div>
 				</div>
@@ -69,4 +70,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(BuyDirect);
+export default connect(mapStateToProps)(Redeem);

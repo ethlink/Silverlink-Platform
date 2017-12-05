@@ -13,17 +13,19 @@ contract LNKSExchange is OwnableMultiple {
     uint amount;
   }
 
+  struct Redemption {
+    address redeemer;
+    uint amount;
+  }
+
   LNKSToken token;
   uint fee;
   mapping(address => bool) usedAddresses;
   Order[] orders;
+  Redemption[] redemptions;
 
   function LNKSExchange() {
     fee = 30000000000000000; // 0.03 eth
-  }
-
-  function getFee() constant returns (uint) {
-    return fee;
   }
 
   function setTokenAddress(address _tokenAddress) public onlyOwner {
@@ -31,6 +33,7 @@ contract LNKSExchange is OwnableMultiple {
   }
 
   event BuyDirectEvent(address _buyer, uint _amount);
+  event RedeemEvent(address _redeember, uint _amount);
 
   function buyDirect() public payable {
     Order memory order = Order({
@@ -54,7 +57,7 @@ contract LNKSExchange is OwnableMultiple {
 
     Order memory order = orders[_index];
 
-    // Deduct $10 if address is never used
+    // Deduct fee if address is never used
     if (usedAddresses[order.buyer] == false) {
       _tokensAmount = _tokensAmount.sub(fee);
       usedAddresses[order.buyer] == true;
@@ -72,8 +75,39 @@ contract LNKSExchange is OwnableMultiple {
     fee = _fee;
   }
 
+  function getFee() constant returns (uint) {
+    return fee;
+  }
+
   function getOrdersLength() public constant onlyOwner returns (uint) {
     return orders.length;
+  }
+
+  function redeem(uint _value) public returns (uint) {
+    require(token.balanceOf(msg.sender) >= _value);
+
+    // Transfer tokens from sender to exchange vault
+    token.approveFrom(msg.sender, this, _value);
+    token.transferFrom(msg.sender, this, _value);
+
+    // Take note of executed redemption
+    Redemption memory redemption = Redemption({
+      redeemer: msg.sender,
+      amount: _value
+    });
+
+    redemptions.push(redemption);
+
+    RedeemEvent(redemption.redeemer, redemption.amount);
+  }
+
+  function getRedemptionsLength() public constant onlyOwner returns (uint) {
+    return redemptions.length;
+  }
+
+  function getRedemption(uint _index) public onlyOwner returns (address, uint) {
+    Redemption memory redemption = redemptions[_index];
+    return (redemption.redeemer, redemption.amount);
   }
 
   /*
@@ -81,6 +115,30 @@ contract LNKSExchange is OwnableMultiple {
    */
   function() public payable {}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   // function deleteEntity(address entityAddress) public returns(bool success) {

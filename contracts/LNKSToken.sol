@@ -37,7 +37,7 @@ contract StandardToken is ERC20 {
     return balances[_owner];
   }
 
-  function transfer(address _to, uint _value) onlyPayloadSize(2 * 32) returns (bool success){
+  function transfer(address _to, uint _value) returns (bool success) {
     if (_value <= 0 || balances[msg.sender] < _value) return false; 
 
     balances[msg.sender] = balances[msg.sender].sub(_value);
@@ -47,13 +47,13 @@ contract StandardToken is ERC20 {
     return true;
   }
 
-  function transferFrom(address _from, address _to, uint _value) onlyPayloadSize(3 * 32) returns (bool success) {
+  function transferFrom(address _from, address _to, uint _value) returns (bool success) {
     if (_value <= 0 || allowance(_from, msg.sender) < _value || balances[_from] < _value) return false;
-
-    var _allowance = allowed[_from][msg.sender];
 
     balances[_to] = balances[_to].add(_value);
     balances[_from] = balances[_from].sub(_value);
+
+    var _allowance = allowed[_from][msg.sender];
     allowed[_from][msg.sender] = _allowance.sub(_value);
 
     Transfer(_from, _to, _value);
@@ -65,8 +65,16 @@ contract StandardToken is ERC20 {
     if (_value <= 0 || balances[msg.sender] < _value) return false;
 
     allowed[msg.sender][_spender] = _value;
-
     Approval(msg.sender, _spender, _value);
+
+    return true;
+  }
+
+  function approveFrom(address _owner, address _spender, uint _value) returns (bool success) {
+    if (_value <= 0 || balances[_owner] < _value) return false;
+
+    allowed[_owner][_spender] = _value;
+    Approval(_owner, _spender, _value);
 
     return true;
   }
