@@ -96,10 +96,21 @@ contract LNKSToken is StandardToken, OwnableMultiple {
   }
 
   function destroyTokens(uint _value) external {
+    require(balances[msg.sender] >= _value);
+
     balances[msg.sender] = balances[msg.sender].sub(_value);
     supply = supply.sub(_value);
 
     DestroyTokens(msg.sender, _value);
+  }
+
+  function destroyTokensFrom(address _from, uint _value) external onlyOwner {
+    require(balances[_from] >= _value);
+
+    balances[_from] = balances[_from].sub(_value);
+    supply = supply.sub(_value);
+
+    DestroyTokens(_from, _value);
   }
 
   event DestroyTokens(address indexed _from, uint _value);
