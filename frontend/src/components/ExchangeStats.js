@@ -36,13 +36,9 @@ class ExchangeStats extends Component {
 
 	render() {
 		return (
-			<div className="ExchangeStats container">
-				<div className="row">
-					<div className="col-xs-12">
-						<h2>Exchange Info</h2>
-						<h4>Fee: {this.state.fee} ETH</h4>
-					</div>
-				</div>
+			<div className="exchange-stats col-xs-6 col-md-6">
+				<h2>Exchange Info</h2>
+				<h4>Fee: {this.state.fee} ETH</h4>
 			</div>
 		);
 	}

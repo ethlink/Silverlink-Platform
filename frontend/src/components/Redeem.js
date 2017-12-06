@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Form, Icon, Input, Button } from 'antd';
+const FormItem = Form.Item;
 
 
 class Redeem extends Component {
@@ -42,20 +44,19 @@ class Redeem extends Component {
 
 	render() {
 		return (
-			<div className="balance container">
-				<div className="row">
-					<div className="col-xs-12">
-						<h2>Redeem tokens</h2>
+			<div className="col-xs-6 col-md-6">
+				<h2>Redeem tokens</h2>
 
-						<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
-						<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
+				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
+				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
 
-						<form onSubmit={this.handleSubmit}>
-							<input type="number" onChange={this.handleChange} value={this.state.amount} placeholder="Amount to redeem" />
-							<button type="submit">Redeem</button>
-						</form>
-					</div>
-				</div>
+				<Form onSubmit={this.handleSubmit}>
+					<FormItem>
+			        	<Input type="number" onChange={this.handleChange} value={this.state.amount} placeholder="Amount to redeem" />
+					</FormItem>
+
+					<Button type="primary" htmlType="submit">Redeem tokens</Button>
+				</Form>
 			</div>
 		);
 	}

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { initWeb3, initLNKSTokenContract, initLNKSExchangeContract } from '../actions';
 
+import 'antd/dist/antd.css';
+
 import Header from '../containers/Header';
 import Address from './Address';
 import Balance from './Balance';
@@ -30,10 +32,18 @@ class App extends Component {
         <Header />
         <Address />
         <Balance />
-        <CoinStats />
-        <ExchangeStats />
-        <BuyDirect />
-        <Redeem />
+
+        <div className="container">
+          <div className="row">
+            <CoinStats />
+            <ExchangeStats />
+          </div>
+
+          <div className="row">
+            <BuyDirect />
+            <Redeem />
+          </div>
+        </div>
       </div>
     );
   }

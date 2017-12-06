@@ -37,15 +37,11 @@ class CoinStats extends Component {
 
 	render() {
 		return (
-			<div className="CoinStats container">
-				<div className="row">
-					<div className="col-xs-12">
-						<h2>Market Info</h2>
-						<h4>Tokens in Circulation: {this.state.supply} LNKS</h4>
-						<h4>Silver in Reserves: {this.state.kilos} KG</h4>
-						<h4>Certificates: ???</h4>
-					</div>
-				</div>
+			<div className="coin-stats col-xs-12 col-sm-6">
+				<h2>Market Info</h2>
+				<h4>Tokens in Circulation: {this.state.supply} LNKS</h4>
+				<h4>Silver in Reserves: {this.state.kilos} KG</h4>
+				<h4>Certificates: ???</h4>
 			</div>
 		);
 	}

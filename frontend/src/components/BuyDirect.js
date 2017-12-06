@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Form, Icon, Input, Button } from 'antd';
+const FormItem = Form.Item;
 
 
 class BuyDirect extends Component {
@@ -41,20 +43,19 @@ class BuyDirect extends Component {
 
 	render() {
 		return (
-			<div className="balance container">
-				<div className="row">
-					<div className="col-xs-12">
-						<h2>Buy directly</h2>
+			<div className="col-xs-6 col-md-6">
+				<h2>Buy directly</h2>
 
-						<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
-						<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
+				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
+				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
 
-						<form onSubmit={this.handleSubmit}>
-							<input type="number" onChange={this.handleChange} value={this.state.amount} placeholder="Amount to buy" />
-							<button type="submit">Buy directly</button>
-						</form>
-					</div>
-				</div>
+				<Form onSubmit={this.handleSubmit}>
+			        <FormItem>
+			        	<Input type="number" onChange={this.handleChange} value={this.state.amount} placeholder="Amount to buy" />
+			        </FormItem>
+
+					<Button type="primary" htmlType="submit">Buy tokens</Button>
+				</Form>
 			</div>
 		);
 	}
