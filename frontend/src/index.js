@@ -7,7 +7,6 @@ import reducers from './reducers';
 
 import './css/index.scss';
 import App from './components/App';
-import registerServiceWorker from './registerServiceWorker';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 
@@ -16,4 +15,3 @@ ReactDOM.render(
 		<App />
 	</Provider>
 	, document.getElementById('root'));
-registerServiceWorker();

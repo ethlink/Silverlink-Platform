@@ -105,7 +105,7 @@ contract LNKSExchange is OwnableMultiple {
     require(orders[_index].amount > 0);
 
     Redemption memory redemption = redemptions[_index];
-    token.destroyTokensFrom(redemptions.redeemer, redemption.value);
+    token.destroyTokensFrom(redemption.redeemer, redemption.amount);
 
     // remove order from orders array
     redemptions[_index] = redemptions[redemptions.length-1];
