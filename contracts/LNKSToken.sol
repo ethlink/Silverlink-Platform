@@ -18,7 +18,7 @@ contract StandardToken is ERC20 {
 
   mapping(address => uint) balances;
   mapping (address => mapping (address => uint)) allowed;
-  uint supply;
+  uint256 supply;
 
   // Get the total token supply in circulation
   function totalSupply() constant returns (uint) {
@@ -38,7 +38,7 @@ contract StandardToken is ERC20 {
   }
 
   function transfer(address _to, uint _value) returns (bool success) {
-    if (_value <= 0 || balances[msg.sender] < _value) return false; 
+    require(balances[msg.sender] >= _value);
 
     balances[msg.sender] = balances[msg.sender].sub(_value);
     balances[_to] = balances[_to].add(_value);
@@ -48,13 +48,14 @@ contract StandardToken is ERC20 {
   }
 
   function transferFrom(address _from, address _to, uint _value) returns (bool success) {
-    if (_value <= 0 || allowance(_from, msg.sender) < _value || balances[_from] < _value) return false;
+    var allowance = allowed[_from][msg.sender];
+
+    require(balances[_from] >= _value && allowance >= _value);
 
     balances[_to] = balances[_to].add(_value);
     balances[_from] = balances[_from].sub(_value);
 
-    var _allowance = allowed[_from][msg.sender];
-    allowed[_from][msg.sender] = _allowance.sub(_value);
+    allowed[_from][msg.sender] = allowance.sub(_value);
 
     Transfer(_from, _to, _value);
 
@@ -62,8 +63,6 @@ contract StandardToken is ERC20 {
   }
 
   function approve(address _spender, uint _value) returns (bool success) {
-    if (_value <= 0 || balances[msg.sender] < _value) return false;
-
     allowed[msg.sender][_spender] = _value;
     Approval(msg.sender, _spender, _value);
 
@@ -71,8 +70,6 @@ contract StandardToken is ERC20 {
   }
 
   function approveFrom(address _owner, address _spender, uint _value) returns (bool success) {
-    if (_value <= 0 || balances[_owner] < _value) return false;
-
     allowed[_owner][_spender] = _value;
     Approval(_owner, _spender, _value);
 
