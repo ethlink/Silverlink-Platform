@@ -1,13 +1,9 @@
 const expectThrow = require('./utils').expectThrow
-const LNKSToken = artifacts.require("./LNKSToken.sol");
-let LNKS;
-let val;
+const LNKSToken = artifacts.require("./LNKSToken.sol")
+let LNKS
 
 // Test suite
 contract('LNKSToken', function(accounts) {
-  var user1 = accounts[0];
-  var user2 = accounts[1];
-
   beforeEach(async () => {
     LNKS = await LNKSToken.new();
     LNKS.mint(accounts[0], 10000);

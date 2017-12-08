@@ -18,13 +18,14 @@ contract LNKSExchange is OwnableMultiple {
     uint amount;
   }
 
-  LNKSToken token;
-  uint fee;
+  LNKSToken public token;
+  uint public fee;
   mapping(address => bool) usedAddresses;
   Order[] orders;
   Redemption[] redemptions;
 
-  function LNKSExchange() {
+  function LNKSExchange(address _tokenAddress) {
+    token = LNKSToken(_tokenAddress);
     fee = 30000000000000000; // 0.03 eth
   }
 
@@ -126,38 +127,3 @@ contract LNKSExchange is OwnableMultiple {
    */
   function() public payable {}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // function deleteEntity(address entityAddress) public returns(bool success) {
-  //   if(!isEntity(entityAddress)) throw;
-  //   uint rowToDelete = entityStructs[entityAddress].listPointer;
-  //   address keyToMove   = entityList[entityList.length-1];
-  //   entityList[rowToDelete] = keyToMove;
-  //   entityStructs[keyToMove].listPointer = rowToDelete;
-  //   entityList.length--;
-  //   return true;
-  // }
