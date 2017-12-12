@@ -22,9 +22,9 @@ class ExchangeStats extends Component {
 
 	getExchangeStats(LNKSExchange) {
 		LNKSExchange.deployed().then(token => {
-			token.getFee().then(fee => {
+			token.fee().then(fee => {
 				this.setState({
-					fee: this.props.web3.web3.fromWei(fee.toNumber(), 'ether')
+					fee: fee.toNumber() / 10
 				});
 			});
 		});
@@ -38,7 +38,7 @@ class ExchangeStats extends Component {
 		return (
 			<div className="exchange-stats col-xs-6 col-md-6">
 				<h2>Exchange Info</h2>
-				<h4>Fee: {this.state.fee} ETH</h4>
+				<h4>Fee: {this.state.fee}% (at least 0.001 LNKS)</h4>
 			</div>
 		);
 	}

@@ -31,8 +31,6 @@ class BuyDirect extends Component {
 			axios.get('https://www.quandl.com/api/v3/datasets/LBMA/SILVER.json?api_key=y7Pa1CUGkHby28hYKivu')
 		])
         .then(axios.spread((eth, silver) => {
-        	console.log(eth, silver);
-
             this.setState({
                 priceEth: eth.data.USD,
                 priceGram: (parseFloat(silver.data.dataset.data[0][1]) / 28.3495).toFixed(2)
@@ -43,20 +41,16 @@ class BuyDirect extends Component {
         .catch(error => {
             console.log(error);
         });
-
-        console.log(this.props);
 	}
 
 	getFee(LNKSExchange) {
-		console.log(LNKSExchange);
-
 		LNKSExchange.deployed().then(exchange => {
-			exchange.getFee()
-			.then(res => {
-				this.setState({
-					fee: this.props.web3.web3.fromWei(res.toNumber(), 'ether')
+			exchange.fee()
+				.then(res => {
+					this.setState({
+						fee: `${res.toNumber() / 10}% or at least 0.001 LNKS`
+					});
 				});
-			});
 		});
 	}
 
@@ -65,6 +59,19 @@ class BuyDirect extends Component {
 			amountTokens = (etherInUsd / this.state.priceGram).toFixed(2);
 
 		this.setState({amountTokens});
+
+		console.log(amountTokens);
+
+		this.props.LNKSExchange.deployed().then(exchange => {
+			exchange.calculateFee.call(amountTokens * 1000)
+				.then(res => {
+					console.log(res);
+
+					this.setState({
+						fee: `${res.toNumber() / 1000} LNKS`
+					});
+				});
+		});
 	}
 
 	handleChange(event) {
@@ -77,8 +84,6 @@ class BuyDirect extends Component {
 		event.preventDefault();
 
 		this.props.LNKSExchange.deployed().then(exchange => {
-			console.log("Exchange address:", exchange.address);
-			
 			exchange.buyDirect({
 				from: this.props.account,
 				value: this.props.web3.web3.toWei(this.state.amountEth, 'ether'),
@@ -87,7 +92,7 @@ class BuyDirect extends Component {
 				this.setState({success: `Success! Transaction hash - ${receipt.tx}`});
 			}).catch(error => {
 				this.setState({failure: error.message});
-			});			
+			});
 		});
 	}
 
@@ -103,7 +108,7 @@ class BuyDirect extends Component {
 				<h2>Buy directly</h2>
 
 				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
-				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
+				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>
 
 				<h5>1 ETH = {this.state.priceEth} USD</h5>
 				<h5>1 gram of silver = {this.state.priceGram} USD = 1 LNKS</h5>
@@ -115,7 +120,7 @@ class BuyDirect extends Component {
 			        </FormItem>
 
 					<Button type="primary" htmlType="submit">Buy tokens</Button>
-					<h6 style={{marginTop: 5}}>* Fee: {this.state.fee} ETH (for first time buyers)</h6>
+					<h6 style={{marginTop: 5}}>* Fee: {this.state.fee} (for first time buyers)</h6>
 				</Form>
 			</div>
 		);
