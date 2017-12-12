@@ -5,10 +5,7 @@ let token;
 let exchange;
 
 // THINGS TO TEST:
-// 1. Approve order
-// 2. Redeem order (supply and balance change)
-// 3. Redeem and approve from other accounts
-// 4. BuyDirect fee 
+// 4. BuyDirect fee
 
 // Test suite
 contract('LNKSToken', function(accounts) {
@@ -17,15 +14,15 @@ contract('LNKSToken', function(accounts) {
     exchange = await LNKSExchange.new(token.address)
 
     await token.addOwner(exchange.address)
-
-    // 
-    // token.mint(accounts[1], 10000)
+    await token.addOwner(accounts[0])
   })
 
-  it("should buy direct 0.01 ETH worth of tokens", async () => {
-  	const value = 0.01
+  it("should buy direct 1 ETH worth of tokens", async () => {
+  	const value = 1
   	const valueWei = parseInt(web3.toWei(value, 'ether'))
-  	const exchangeRate = 10000
+  	const exchangeRate = 100000
+    const tokensAmount = parseInt(value * exchangeRate)
+    const feeAmount = tokensAmount * 0.003
 
   	await exchange.buyDirect({
   		from: accounts[0],
@@ -40,13 +37,57 @@ contract('LNKSToken', function(accounts) {
   	assert.strictEqual(order[0], accounts[0])
   	assert.strictEqual(order[1].toNumber(), valueWei)
 
-  	await exchange.approveOrder(0, parseInt(value * exchangeRate))
+  	await exchange.approveOrder(0, tokensAmount)
 
   	let balance = await token.balanceOf.call(accounts[0])
- 	assert.strictEqual(balance.toNumber(), parseInt(value * exchangeRate))
+ 	  assert.strictEqual(balance.toNumber(), tokensAmount - feeAmount)
+
+    let balanceEth = await web3.eth.getBalance(exchange.address)
+ 	  assert.strictEqual(balanceEth.toNumber(), valueWei, `exchange eth balance should be ${value}`)
+
+    balance = await token.balanceOf.call(exchange.address)
+ 	  assert.strictEqual(balance.toNumber(), feeAmount, `exchange token balance should be ${feeAmount}`)
 
   	ordersLength = await exchange.getOrdersLength.call()
   	assert.strictEqual(ordersLength.toNumber(), 0, 'number of orders should be 1')
+
+    // second order, this time should not deduct fee
+    await exchange.buyDirect({
+  		from: accounts[0],
+  		value: valueWei
+  	})
+
+  	await exchange.approveOrder(0, tokensAmount)
+
+  	balance = await token.balanceOf.call(accounts[0])
+ 	  assert.strictEqual(balance.toNumber(), tokensAmount*2 - feeAmount)
+
+    balanceEth = await web3.eth.getBalance(exchange.address)
+ 	  assert.strictEqual(balanceEth.toNumber(), valueWei*2, `exchange eth balance should be ${value}`)
+
+    balance = await token.balanceOf.call(exchange.address)
+ 	  assert.strictEqual(balance.toNumber(), feeAmount, `exchange token balance should be ${feeAmount}`)
+  })
+
+  it("should buy direct 0.0001 ETH worth of tokens", async () => {
+  	const value = 0.0001
+  	const valueWei = parseInt(web3.toWei(value, 'ether'))
+  	const exchangeRate = 10000
+    const tokensAmount = parseInt(value * exchangeRate)
+    const feeAmount = 1
+
+  	await exchange.buyDirect({
+  		from: accounts[0],
+  		value: valueWei
+  	})
+
+  	await exchange.approveOrder(0, tokensAmount)
+
+  	let balance = await token.balanceOf.call(accounts[0])
+ 	  assert.strictEqual(balance.toNumber(), tokensAmount - feeAmount)
+
+    balance = await token.balanceOf.call(exchange.address)
+ 	  assert.strictEqual(balance.toNumber(), feeAmount, `exchange token balance should be ${feeAmount}`)
   })
 
   it("should buy direct 0.01 ETH worth of tokens", async () => {
@@ -54,21 +95,66 @@ contract('LNKSToken', function(accounts) {
 
   	token.mint(accounts[0], value)
 
-  	await exchange.redeem(value)
+    let balance = await token.balanceOf.call(accounts[0])
+    assert.strictEqual(balance.toNumber(), value)
+
+  	await exchange.redeem(value, {from: accounts[0]})
 
    	let redemptionsLength = await exchange.getRedemptionsLength.call()
   	assert.strictEqual(redemptionsLength.toNumber(), 1, 'number of redemptions should be 1')
+
+    balance = await token.balanceOf.call(accounts[0])
+ 	  assert.strictEqual(balance.toNumber(), 0, 'balance should be 0')
+
+    balance = await token.balanceOf.call(exchange.address)
+ 	  assert.strictEqual(balance.toNumber(), 10000, 'balance should be 10000')
 
   	let redemption = await exchange.getRedemption.call(0)
    	assert.strictEqual(redemption[0], accounts[0], 'account should be accounts[0]')
    	assert.strictEqual(redemption[1].toNumber(), value, 'tokens amount should be 10000')
 
-  	//await exchange.approveRedemption(0)
+  	await exchange.approveRedemption(0);
 
-  	//let balance = await token.balanceOf.call(accounts[0])
- 	//assert.strictEqual(balance.toNumber(), 0)
+    balance = await token.balanceOf.call(exchange.address)
+ 	  assert.strictEqual(balance.toNumber(), 0, 'balance should be 0')
 
-  	//redemptionsLength = await exchange.getRedemptionsLength.call()
-  	//assert.strictEqual(redemptionsLength.toNumber(), 0, 'number of orders should be 1')
+  	redemptionsLength = await exchange.getRedemptionsLength.call()
+  	assert.strictEqual(redemptionsLength.toNumber(), 0, 'number of orders should be 1')
   })
+
+  it('should fail to approve order from non-owner acc', async () => {
+    const value = 0.01
+  	const valueWei = parseInt(web3.toWei(value, 'ether'))
+  	const exchangeRate = 10000
+
+  	await exchange.buyDirect({
+  		from: accounts[0],
+  		value: valueWei
+  	})
+
+  	return expectThrow(exchange.approveOrder(0, parseInt(value * exchangeRate), {
+      from: accounts[3]
+    }));
+  });
+
+  it('should fail to approve redeem from non-owner acc', async () => {
+    const value = 10000
+
+  	token.mint(accounts[0], value)
+  	await exchange.redeem(value, {from: accounts[0]})
+
+    return expectThrow(exchange.approveRedemption(0, {
+      from: accounts[3]
+    }));
+  });
 });
+
+
+/*
+1. LNKSToken.deployed().then(function(instance) {token=instance;})
+2. LNKSExchange.deployed().then(function(instance) {exchange=instance;})
+3. token.mint(web3.eth.accounts[0],100)
+4. exchange.setTokenAddress(token.address)
+5. exchange.redeem(5)
+6. exchange.approveRedemption(0)
+ */

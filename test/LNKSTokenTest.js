@@ -28,7 +28,7 @@ contract('LNKSToken', function(accounts) {
     assert.strictEqual(symbol, 'LNKS')
   })
 
-  // TRANSERS
+  // TRANSFERS
   // normal transfers without approvals
   it('transfers: ether transfer should be reversed.', async () => {
     const balanceBefore = await LNKS.balanceOf.call(accounts[0])

@@ -21,23 +21,23 @@ contract StandardToken is ERC20 {
   uint256 supply;
 
   // Get the total token supply in circulation
-  function totalSupply() constant returns (uint) {
+  function totalSupply() public constant returns (uint) {
     return supply;
   }
 
   /*
-   * Fix for the ERC20 short address attack  
+   * Fix for the ERC20 short address attack
    */
   modifier onlyPayloadSize(uint size) {
     require(msg.data.length < size + 4);
     _;
   }
 
-  function balanceOf(address _owner) constant returns (uint balance) {
+  function balanceOf(address _owner) public constant returns (uint balance) {
     return balances[_owner];
   }
 
-  function transfer(address _to, uint _value) returns (bool success) {
+  function transfer(address _to, uint _value) public returns (bool success) {
     require(balances[msg.sender] >= _value);
 
     balances[msg.sender] = balances[msg.sender].sub(_value);
@@ -47,7 +47,7 @@ contract StandardToken is ERC20 {
     return true;
   }
 
-  function transferFrom(address _from, address _to, uint _value) returns (bool success) {
+  function transferFrom(address _from, address _to, uint _value) public returns (bool success) {
     var allowance = allowed[_from][msg.sender];
 
     require(balances[_from] >= _value && allowance >= _value);
@@ -62,21 +62,21 @@ contract StandardToken is ERC20 {
     return true;
   }
 
-  function approve(address _spender, uint _value) returns (bool success) {
+  function approve(address _spender, uint _value) public returns (bool success) {
     allowed[msg.sender][_spender] = _value;
     Approval(msg.sender, _spender, _value);
 
     return true;
   }
 
-  function approveFrom(address _owner, address _spender, uint _value) returns (bool success) {
+  function approveFrom(address _owner, address _spender, uint _value) public returns (bool success) {
     allowed[_owner][_spender] = _value;
     Approval(_owner, _spender, _value);
 
     return true;
   }
 
-  function allowance(address _owner, address _spender) constant returns (uint remaining) {
+  function allowance(address _owner, address _spender) public constant returns (uint remaining) {
     return allowed[_owner][_spender];
   }
 }
@@ -87,7 +87,7 @@ contract LNKSToken is StandardToken, OwnableMultiple {
   string public constant symbol = "LNKS"; // ERC20 compliant Token code
   uint public constant decimals = 3; // Token has 3 digit precision
 
-  function mint(address _spender, uint _value) onlyOwner {
+  function mint(address _spender, uint _value) public onlyOwner {
     balances[_spender] += _value;
     supply += _value;
   }
@@ -98,19 +98,17 @@ contract LNKSToken is StandardToken, OwnableMultiple {
     balances[msg.sender] = balances[msg.sender].sub(_value);
     supply = supply.sub(_value);
 
-    DestroyTokens(msg.sender, _value);
+    DestroyTokensEvent(msg.sender, _value);
   }
 
-  function destroyTokensFrom(address _from, uint _value) external onlyOwner {
+  /*function destroyTokensFrom(address _from, uint _value) external onlyOwner {
     require(balances[_from] >= _value);
 
     balances[_from] = balances[_from].sub(_value);
     supply = supply.sub(_value);
 
-    DestroyTokens(_from, _value);
-  }
+    DestroyTokensEvent(_from, _value);
+  }*/
 
-  event DestroyTokens(address indexed _from, uint _value);
+  event DestroyTokensEvent(address indexed _from, uint _value);
 }
-
-

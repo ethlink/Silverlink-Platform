@@ -26,7 +26,7 @@ contract LNKSExchange is OwnableMultiple {
 
   function LNKSExchange(address _tokenAddress) {
     token = LNKSToken(_tokenAddress);
-    fee = 30000000000000000; // 0.03 eth
+    fee = 3; // 30000000000000000; // 0.03 eth // 3 - 0.3% in 1-digit precision
   }
 
   function setTokenAddress(address _tokenAddress) public onlyOwner {
@@ -43,7 +43,6 @@ contract LNKSExchange is OwnableMultiple {
     });
 
     orders.push(order);
-    usedAddresses[msg.sender] = true;
 
     BuyDirectEvent(order.buyer, order.amount);
   }
@@ -54,14 +53,16 @@ contract LNKSExchange is OwnableMultiple {
   }
 
   function approveOrder(uint _index, uint _tokensAmount) public onlyOwner {
-    require(orders[_index].amount > 0);
+    require(orders[_index].amount >= 0);
 
     Order memory order = orders[_index];
 
     // Deduct fee if address is never used
     if (usedAddresses[order.buyer] == false) {
-      _tokensAmount = _tokensAmount.sub(fee);
-      usedAddresses[order.buyer] == true;
+      uint feeAmount = calculateFee(_tokensAmount);
+      _tokensAmount = _tokensAmount.sub(feeAmount);
+      token.mint(this, feeAmount);
+      usedAddresses[order.buyer] = true;
     }
 
     // mint tokens for the buyer
@@ -76,8 +77,11 @@ contract LNKSExchange is OwnableMultiple {
     fee = _fee;
   }
 
-  function getFee() constant returns (uint) {
-    return fee;
+  function calculateFee(uint _amount) public returns (uint) {
+    uint feeAmount = _amount * fee / 1000;
+
+    if (feeAmount == 0) return 1;
+    else return feeAmount;
   }
 
   function getOrdersLength() public constant onlyOwner returns (uint) {
@@ -87,7 +91,7 @@ contract LNKSExchange is OwnableMultiple {
   function redeem(uint _value) public returns (uint) {
     require(token.balanceOf(msg.sender) >= _value);
 
-    // Transfer tokens from sender to exchange vault
+    // Approve tokens transfer from sender to exchange vault
     token.approveFrom(msg.sender, this, _value);
     token.transferFrom(msg.sender, this, _value);
 
@@ -103,10 +107,10 @@ contract LNKSExchange is OwnableMultiple {
   }
 
   function approveRedemption(uint _index) public onlyOwner {
-    require(orders[_index].amount > 0);
+    require(redemptions[_index].amount >= 0);
 
     Redemption memory redemption = redemptions[_index];
-    token.destroyTokensFrom(redemption.redeemer, redemption.amount);
+    token.destroyTokens(redemption.amount);
 
     // remove order from orders array
     redemptions[_index] = redemptions[redemptions.length-1];
@@ -127,3 +131,13 @@ contract LNKSExchange is OwnableMultiple {
    */
   function() public payable {}
 }
+
+
+/*
+1. LNKSToken.deployed().then(function(instance) {token=instance;})
+2. LNKSExchange.deployed().then(function(instance) {exchange=instance;})
+3. token.mint(web3.eth.accounts[0],100)
+4. exchange.setTokenAddress(token.address)
+5. exchange.redeem(5)
+6. exchange.approveRedemption(0)
+ */
