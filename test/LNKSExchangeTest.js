@@ -4,9 +4,6 @@ const LNKSExchange = artifacts.require("./LNKSExchange.sol");
 let token;
 let exchange;
 
-// THINGS TO TEST:
-// 4. BuyDirect fee
-
 // Test suite
 contract('LNKSToken', function(accounts) {
   beforeEach(async () => {
