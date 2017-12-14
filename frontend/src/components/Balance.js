@@ -13,32 +13,26 @@ class Balance extends Component {
 		this.getBalance = this.getBalance.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.LNKSToken !== nextProps.LNKSToken) {
-			this.getBalance(nextProps.LNKSToken);
-		}
+	componentDidMount() {
+		this.getBalance();
 	}
 
-	getBalance(LNKSToken) {
-		LNKSToken.deployed().then(token => {
+	getBalance() {
+		this.props.LNKSToken.deployed().then(token => {
 			token.balanceOf(this.props.account).then(balance => {
 				this.setState({balance: balance.toNumber() / 1000});
-			});			
+			});
 		});
 
 		setTimeout(() => {
-			this.getBalance(LNKSToken);
+			this.getBalance();
 		}, 2000);
 	}
 
 	render() {
 		return (
-			<div className="balance container">
-				<div className="row">
-					<div className="col-xs-12">
-						<h4>Your balance: {this.state.balance} LNKS</h4>
-					</div>
-				</div>
+			<div className="col-xs-12">
+				<h4>Your balance: {this.state.balance} LNKS</h4>
 			</div>
 		);
 	}

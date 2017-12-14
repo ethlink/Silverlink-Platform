@@ -14,24 +14,18 @@ class ExchangeStats extends Component {
 		this.getExchangeStats = this.getExchangeStats.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.LNKSExchange !== nextProps.LNKSExchange) {
-			this.getExchangeStats(nextProps.LNKSExchange);
-		}
+	componentDidMount() {
+		this.getExchangeStats();
 	}
 
-	getExchangeStats(LNKSExchange) {
-		LNKSExchange.deployed().then(token => {
+	getExchangeStats() {
+		this.props.LNKSExchange.deployed().then(token => {
 			token.fee().then(fee => {
 				this.setState({
 					fee: fee.toNumber() / 10
 				});
 			});
 		});
-
-		setTimeout(() => {
-			this.getExchangeStats(LNKSExchange);
-		}, 2000);
 	}
 
 	render() {

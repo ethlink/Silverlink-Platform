@@ -14,14 +14,12 @@ class CoinStats extends Component {
 		this.getCoinStats = this.getCoinStats.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.LNKSToken !== nextProps.LNKSToken) {
-			this.getCoinStats(nextProps.LNKSToken);
-		}
+	componentDidMount() {
+		this.getCoinStats();
 	}
 
 	getCoinStats(LNKSToken) {
-		LNKSToken.deployed().then(token => {
+		this.props.LNKSToken.deployed().then(token => {
 			token.totalSupply().then(supply => {
 				this.setState({
 					supply: supply.toNumber(),
@@ -40,7 +38,7 @@ class CoinStats extends Component {
 			<div className="coin-stats col-xs-12 col-sm-6">
 				<h2>Market Info</h2>
 				<h4>Tokens in Circulation: {this.state.supply} LNKS</h4>
-				<h4>Silver in Reserves: {this.state.kilos} KG</h4>
+				<h4>Silver in Reserves: {this.state.kilos} GRAMS</h4>
 				<h4>Certificates: ???</h4>
 			</div>
 		);

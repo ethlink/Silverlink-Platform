@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 import axios from 'axios';
 const FormItem = Form.Item;
 
@@ -60,13 +60,9 @@ class BuyDirect extends Component {
 
 		this.setState({amountTokens});
 
-		console.log(amountTokens);
-
 		this.props.LNKSExchange.deployed().then(exchange => {
 			exchange.calculateFee.call(amountTokens * 1000)
 				.then(res => {
-					console.log(res);
-
 					this.setState({
 						fee: `${res.toNumber() / 1000} LNKS`
 					});

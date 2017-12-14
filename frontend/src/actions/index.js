@@ -34,7 +34,10 @@ export function initWeb3(payload) {
 
 export function initLNKSTokenContract(payload) {
 	let instance = contract(LNKSTokenArtifact);
-	instance.setProvider(payload.provider);
+
+	if (payload.provider) {
+		instance.setProvider(payload.provider);
+	}
 
 	return {
 		type: 'INIT_LNKS_TOKEN',
@@ -44,7 +47,10 @@ export function initLNKSTokenContract(payload) {
 
 export function initLNKSExchangeContract(payload) {
 	let instance = contract(LNKSExchangeArtifact);
-	instance.setProvider(payload.provider);
+
+	if (payload.provider) {
+		instance.setProvider(payload.provider);
+	}
 
 	return {
 		type: 'INIT_LNKS_EXCHANGE',
@@ -59,7 +65,7 @@ export function fetchAccount(payload) {
 				if (err === null) {
 					dispatch({
 						type: 'FETCH_ACCOUNT',
-						payload: account
+						payload: (account != null ? account : 'empty')
 					});
 				} else {
 					dispatch({

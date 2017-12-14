@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 const FormItem = Form.Item;
 
 
@@ -28,7 +28,7 @@ class Redeem extends Component {
 
 		this.props.LNKSExchange.deployed().then(exchange => {
 			console.log("Exchange address:", exchange.address);
-			
+
 			exchange.redeem(this.state.amount*1000, {
 				from: this.props.account,
 				gas: 150000
@@ -38,7 +38,7 @@ class Redeem extends Component {
 				this.setState({success: `Success! Transaction hash - ${receipt.tx}`});
 			}).catch(error => {
 				this.setState({failure: error.message});
-			});			
+			});
 		});
 	}
 
@@ -48,7 +48,7 @@ class Redeem extends Component {
 				<h2>Redeem tokens</h2>
 
 				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
-				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>						
+				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>
 
 				<Form onSubmit={this.handleSubmit}>
 					<FormItem>
