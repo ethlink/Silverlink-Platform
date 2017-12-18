@@ -33,8 +33,8 @@ contract LNKSExchange is OwnableMultiple {
     token = LNKSToken(_tokenAddress);
   }
 
-  event BuyDirectEvent(address _buyer, uint _amount);
-  event RedeemEvent(address _redeember, uint _amount);
+  event BuyDirectEvent(address _buyer, uint _amount, uint _timestamp);
+  event RedeemEvent(address _redeember, uint _amount, uint _timestamp);
 
   function buyDirect() public payable {
     Order memory order = Order({
@@ -44,7 +44,7 @@ contract LNKSExchange is OwnableMultiple {
 
     orders.push(order);
 
-    BuyDirectEvent(order.buyer, order.amount);
+    BuyDirectEvent(order.buyer, order.amount, block.timestamp);
   }
 
   function getOrder(uint _index) public constant onlyOwner returns (address, uint) {
@@ -103,7 +103,7 @@ contract LNKSExchange is OwnableMultiple {
 
     redemptions.push(redemption);
 
-    RedeemEvent(redemption.redeemer, redemption.amount);
+    RedeemEvent(redemption.redeemer, redemption.amount, block.timestamp);
   }
 
   function approveRedemption(uint _index) public onlyOwner {

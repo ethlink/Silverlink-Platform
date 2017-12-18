@@ -10,6 +10,8 @@ export function initWeb3(payload) {
 
 	if (typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
 		provider = web3.currentProvider;
+		//let provider2 = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
+
 		let web3Initiated = new Web3(provider);
 
 		return {
@@ -26,6 +28,7 @@ export function initWeb3(payload) {
 		type: 'INIT_WEB3',
 		payload: {
 			web3Initiated: null,
+			web3InitiatedLocal: null,
 			web3: null,
 			provider: null
 		}
@@ -54,6 +57,19 @@ export function initLNKSExchangeContract(payload) {
 
 	return {
 		type: 'INIT_LNKS_EXCHANGE',
+		payload: instance
+	}
+}
+
+export function initLNKSExchangeContractLocal(payload) {
+	let instance = contract(LNKSExchangeArtifact);
+
+	if (payload.provider) {
+		instance.setProvider(payload.provider);
+	}
+
+	return {
+		type: 'INIT_LNKS_EXCHANGE_LOCAL',
 		payload: instance
 	}
 }

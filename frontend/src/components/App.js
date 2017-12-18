@@ -13,8 +13,7 @@ import ExchangeStats from './ExchangeStats';
 import BuyDirect from './BuyDirect';
 import Redeem from './Redeem';
 import Status from './Status';
-import RedeemTransactions from './RedeemTransactions';
-import BuyDirectTransactions from './BuyDirectTransactions';
+import RecentTransactions from './RecentTransactions';
 
 
 class App extends Component {
@@ -86,8 +85,7 @@ class App extends Component {
             </div>
 
             <div className="row">
-              <BuyDirectTransactions />
-              <RedeemTransactions />
+              <RecentTransactions />
             </div>
           </div> : null}
       </div>
