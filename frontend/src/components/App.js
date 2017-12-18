@@ -13,6 +13,8 @@ import ExchangeStats from './ExchangeStats';
 import BuyDirect from './BuyDirect';
 import Redeem from './Redeem';
 import Status from './Status';
+import RedeemTransactions from './RedeemTransactions';
+import BuyDirectTransactions from './BuyDirectTransactions';
 
 
 class App extends Component {
@@ -33,6 +35,7 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.web3 !== nextProps.web3) {
       this.props.fetchAccount(this.props.web3);
+      this.setState({initiated: true});
 
       if (nextProps.web3.web3Initiated) {
         this.props.initLNKSTokenContract(nextProps.web3);
@@ -80,6 +83,11 @@ class App extends Component {
             <div className="row">
               <BuyDirect />
               <Redeem />
+            </div>
+
+            <div className="row">
+              <BuyDirectTransactions />
+              <RedeemTransactions />
             </div>
           </div> : null}
       </div>

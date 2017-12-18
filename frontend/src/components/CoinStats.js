@@ -22,7 +22,7 @@ class CoinStats extends Component {
 		this.props.LNKSToken.deployed().then(token => {
 			token.totalSupply().then(supply => {
 				this.setState({
-					supply: supply.toNumber(),
+					supply: supply.toNumber() / 1000,
 					kilos: supply.toNumber() / 1000
 				});
 			});

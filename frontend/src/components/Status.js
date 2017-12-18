@@ -15,7 +15,7 @@ class Status extends Component {
           </div>
         : null}
 
-        {(!this.props.account || this.props.account === 'empty') && this.props.web3.web3Initiated ?
+        {this.props.account === 'empty' && this.props.web3.web3Initiated ?
         <div id="alert-container">
           <div className="alert alert-danger" role="alert">
             <strong>Warning!</strong> Seems like you have Metamask ready but your account is locked. Please unlock it before using the app.
