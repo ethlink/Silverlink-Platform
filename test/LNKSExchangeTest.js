@@ -144,6 +144,40 @@ contract('LNKSToken', function(accounts) {
       from: accounts[3]
     }));
   });
+
+  it("should not let buy 0 tokens", async () => {
+    return expectThrow(exchange.buyDirect({
+      from: accounts[0],
+      value: 0
+    }));
+  });
+
+  it("should have 1 ETH balance and then withdraw 0.5 ETH", async () => {
+    const value = 1
+  	const valueWeiDeposit = parseInt(web3.toWei(value, 'ether'))
+    const valueWeiWithdraw = parseInt(web3.toWei(value/2, 'ether'))
+
+    await exchange.buyDirect({
+      from: accounts[0],
+      value: valueWeiDeposit
+    });
+
+    let balanceOwnerEthBefore = await web3.eth.getBalance(accounts[0])
+    let balanceExchangeEthBefore = await web3.eth.getBalance(exchange.address)
+ 	  assert.strictEqual(balanceExchangeEthBefore.toNumber(), valueWeiDeposit, `exchange ETH balance should be ${valueWeiDeposit}`)
+
+    await exchange.withdraw(accounts[0], valueWeiWithdraw)
+
+    let balanceOwnerEthAfter = await web3.eth.getBalance(accounts[0])
+    let balanceExchangeEthAfter = await web3.eth.getBalance(exchange.address)
+    assert(balanceOwnerEthAfter.toNumber()-(balanceOwnerEthAfter.toNumber() + valueWeiWithdraw) < 0.1, `owner ETH balance should be ${valueWeiWithdraw}`)
+    assert.strictEqual(balanceExchangeEthAfter.toNumber(), valueWeiDeposit - valueWeiWithdraw, `exchange ETH balance should be ${value}`)
+  });
+
+  it("should not let withdraw for non-owners", async () => {
+    await exchange.buyDirect({from: accounts[0], value: 500000000});
+    return expectThrow(exchange.withdraw(accounts[1], 5000, {from: accounts[2]}));
+  });
 });
 
 

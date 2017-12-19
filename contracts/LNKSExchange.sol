@@ -26,7 +26,7 @@ contract LNKSExchange is OwnableMultiple {
 
   function LNKSExchange(address _tokenAddress) {
     token = LNKSToken(_tokenAddress);
-    fee = 3; // 30000000000000000; // 0.03 eth // 3 - 0.3% in 1-digit precision
+    fee = 3; // 3 = 0.3% in 1-digit precision
   }
 
   function setTokenAddress(address _tokenAddress) public onlyOwner {
@@ -37,6 +37,8 @@ contract LNKSExchange is OwnableMultiple {
   event RedeemEvent(address _redeember, uint _amount, uint _timestamp);
 
   function buyDirect() public payable {
+    require(msg.value > 0);
+
     Order memory order = Order({
       buyer: msg.sender,
       amount: msg.value
@@ -67,6 +69,18 @@ contract LNKSExchange is OwnableMultiple {
 
     // mint tokens for the buyer
     token.mint(order.buyer, _tokensAmount);
+
+    // remove order from orders array
+    orders[_index] = orders[orders.length-1];
+    orders.length--;
+  }
+
+  function declineOrder(uint _index) public onlyOwner {
+    require(orders[_index].amount >= 0);
+
+    Order memory order = orders[_index];
+
+    order.buyer.transfer(order.amount);
 
     // remove order from orders array
     orders[_index] = orders[orders.length-1];
@@ -117,6 +131,14 @@ contract LNKSExchange is OwnableMultiple {
     redemptions.length--;
   }
 
+  function declineRedemption(uint _index) public onlyOwner {
+    require(redemptions[_index].amount >= 0);
+
+    // remove order from orders array
+    redemptions[_index] = redemptions[redemptions.length-1];
+    redemptions.length--;
+  }
+
   function getRedemptionsLength() public constant onlyOwner returns (uint) {
     return redemptions.length;
   }
@@ -124,6 +146,10 @@ contract LNKSExchange is OwnableMultiple {
   function getRedemption(uint _index) public onlyOwner returns (address, uint) {
     Redemption memory redemption = redemptions[_index];
     return (redemption.redeemer, redemption.amount);
+  }
+
+  function withdraw(address _to, uint _amount) public onlyOwner {
+    _to.transfer(_amount);
   }
 
   /*
