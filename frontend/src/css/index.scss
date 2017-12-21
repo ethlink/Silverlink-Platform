@@ -1,10 +1,80 @@
 @import "header.scss";
 
-html, body { background-color: #f6f6f6 !important; }
+html, body { background-color: #33425c !important; }
+
 
 #root { color: #111;
-	h1, h2, h3, h4, h5, h6, p { color: #111; }
+	h1, h2, h3, h4, h5, h6, p { color: #FFF; }
 	h1 { margin-top: 30px; }
 	.ant-form-item { margin-bottom: 15px; }
 	h2 { margin-top: 30px; }
 }
+
+#ADDRESS { 
+
+border-radius: 15px;
+background-color:#FFF!important;
+width:31%;
+margin:3%;
+margin-left:6%;
+padding:1%;}
+
+#redeem { 
+
+border-radius: 15px;
+background-color:#FFF!important;
+width:19%;
+margin:3%;
+margin-top:3%;
+padding-top:3%; 
+padding-bottom:3%;
+margin-left:16%;  }
+
+#transactions { 
+
+border-radius: 15px;
+padding-top:1.5%;
+background-color:#FFF!important;
+padding-bottom:3%;  }
+
+#buydirect { 
+
+margin:3%;
+border-radius: 15px;
+background-color:#FFF!important;
+width:19%;
+padding-top:3%;
+margin-left:15%;
+  }
+
+#marketinfo { 
+
+margin:3%;
+border-radius: 15px;
+background-color:#FFF!important;
+width:26%;
+padding-top:3%;
+padding-bottom:2%;
+margin-left:9%;
+  }
+
+
+#balance, #exchange { 
+
+margin:3%;
+border-radius: 15px;
+background-color:#FFF!important;
+width:15%;
+margin-top:3%;
+padding-top:6%;
+padding-bottom:6%;  }
+
+#header { 
+
+border-radius: 15px;
+background-color:#FFF!important;
+width:100%;
+margin: 0 auto;
+padding-top:1.5%; 
+padding-bottom:1.5%;
+margin-bottom:1.3%;   }
