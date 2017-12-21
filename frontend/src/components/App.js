@@ -6,8 +6,8 @@ import { initWeb3, initLNKSTokenContract, initLNKSExchangeContract, fetchAccount
 import 'antd/dist/antd.css';
 
 import Header from '../containers/Header';
-import Address from './Address';
 import Balance from './Balance';
+import Address from './Address';
 import CoinStats from './CoinStats';
 import ExchangeStats from './ExchangeStats';
 import BuyDirect from './BuyDirect';
@@ -71,9 +71,11 @@ class App extends Component {
          typeof this.props.account === "string" &&
           this.props.account !== 'empty' ?
           <div>
-            <div className="row">
-              <Address />
+            <div className="col-md-15">
               <Balance />
+
+              <Address />
+
 
               <CoinStats />
               <ExchangeStats />
