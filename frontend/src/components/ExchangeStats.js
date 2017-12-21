@@ -30,9 +30,9 @@ class ExchangeStats extends Component {
 
 	render() {
 		return (
-			<div className="exchange-stats col-xs-6 col-md-6">
-				<h2>Exchange Info</h2>
-				<h4>Fee: {this.state.fee}% (at least 0.001 LNKS)</h4>
+			<div id="exchange" className="exchange-stats col-xs-6 col-md-6">
+				<h4><font color="#AAABAD" className="span2 clearfix">Exchange Info</font></h4>
+				<h4><font color="#AAABAD">Fee:</font><font color="black" ><font size="3"> {this.state.fee}% (at least 0.001 LNKS)</font></font></h4>
 			</div>
 		);
 	}
