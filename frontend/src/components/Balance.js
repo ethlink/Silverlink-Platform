@@ -31,8 +31,8 @@ class Balance extends Component {
 
 	render() {
 		return (
-			<div className="col-xs-12">
-				<h4>Your balance: {this.state.balance} LNKS</h4>
+			<div id="balance" className="row text-center col-sm-6 ">
+				<h4><font color="#AAABAD" className="span2 clearfix">Your Balance</font> <font color="black"><font size="6">{this.state.balance}</font><font size="2"> LNKS</font></font></h4>
 			</div>
 		);
 	}
