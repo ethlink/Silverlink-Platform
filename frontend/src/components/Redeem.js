@@ -1,3 +1,12 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Form, Input, Button } from 'antd';
+const FormItem = Form.Item;
+
+
+class Redeem extends Component {
+	constructor(props) {
+		super(props);
 
 		this.state = {
 			amount: '',
