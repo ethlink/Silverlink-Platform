@@ -11,11 +11,13 @@ contract LNKSExchange is OwnableMultiple {
   struct Order {
     address buyer;
     uint amount;
+    uint timestamp;
   }
 
   struct Redemption {
     address redeemer;
     uint amount;
+    uint timestamp;
   }
 
   LNKSToken public token;
@@ -41,17 +43,18 @@ contract LNKSExchange is OwnableMultiple {
 
     Order memory order = Order({
       buyer: msg.sender,
-      amount: msg.value
+      amount: msg.value,
+      timestamp: block.timestamp
     });
 
     orders.push(order);
 
-    BuyDirectEvent(order.buyer, order.amount, block.timestamp);
+    BuyDirectEvent(order.buyer, order.amount, order.timestamp);
   }
 
-  function getOrder(uint _index) public constant onlyOwner returns (address, uint) {
+  function getOrder(uint _index) public constant onlyOwner returns (address, uint, uint) {
     Order memory order = orders[_index];
-    return (order.buyer, order.amount);
+    return (order.buyer, order.amount, order.timestamp);
   }
 
   function approveOrder(uint _index, uint _tokensAmount) public onlyOwner {
@@ -79,7 +82,6 @@ contract LNKSExchange is OwnableMultiple {
     require(orders[_index].amount >= 0);
 
     Order memory order = orders[_index];
-
     order.buyer.transfer(order.amount);
 
     // remove order from orders array
@@ -112,12 +114,13 @@ contract LNKSExchange is OwnableMultiple {
     // Take note of executed redemption
     Redemption memory redemption = Redemption({
       redeemer: msg.sender,
-      amount: _value
+      amount: _value,
+      timestamp: block.timestamp
     });
 
     redemptions.push(redemption);
 
-    RedeemEvent(redemption.redeemer, redemption.amount, block.timestamp);
+    RedeemEvent(redemption.redeemer, redemption.amount, redemption.timestamp);
   }
 
   function approveRedemption(uint _index) public onlyOwner {
@@ -143,9 +146,9 @@ contract LNKSExchange is OwnableMultiple {
     return redemptions.length;
   }
 
-  function getRedemption(uint _index) public onlyOwner returns (address, uint) {
+  function getRedemption(uint _index) public constant onlyOwner returns (address, uint, uint) {
     Redemption memory redemption = redemptions[_index];
-    return (redemption.redeemer, redemption.amount);
+    return (redemption.redeemer, redemption.amount, redemption.timestamp);
   }
 
   function withdraw(address _to, uint _amount) public onlyOwner {

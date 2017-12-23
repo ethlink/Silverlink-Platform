@@ -4,6 +4,8 @@ const LNKSExchange = artifacts.require("./LNKSExchange.sol");
 let token;
 let exchange;
 
+// TODO: test declineOrder and declineRedemption
+
 // Test suite
 contract('LNKSToken', function(accounts) {
   beforeEach(async () => {
