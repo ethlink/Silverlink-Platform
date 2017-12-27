@@ -34,6 +34,8 @@ class App {
 
     this.app = await contractInstance.deployed();
 
+    await this.web3.eth.personal.unlockAccount(this.account, 'lnkstoken1!', 600);
+
     cb();
   }
 
@@ -44,7 +46,7 @@ class App {
     for (let i = 0; i < len; i++) {
       let request = type === 'order' ? await this.app.getOrder.call(i) : await this.app.getRedemption.call(i),
         createdOn = request[2].toNumber(),
-        deadline = createdOn + 3*24*60*60;
+        deadline = createdOn + 3*24*60*60,
         now = Math.floor(Date.now() / 1000);
 
       if (now > deadline) {
