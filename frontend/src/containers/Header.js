@@ -3,8 +3,8 @@ import React from 'react';
 const Header = () => (
 	<div className="header container">
 		<div className="row">
-			<div className="col-xs-12">
-				<h1>Silver Link Platform</h1>
+			<div id="header" className="col-xs-12">
+				<h5><font color="gray">Silver Link Platform</font></h5>
 			</div>
 		</div>
 	</div>
