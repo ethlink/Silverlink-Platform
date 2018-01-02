@@ -5,11 +5,10 @@ import LNKSExchangeArtifact from '../contracts/LNKSExchange.json';
 
 export function initWeb3(payload) {
 	let web3 = window.web3,
-		Web3 = window.Web3,
-		provider;
+		Web3 = window.Web3;
 
 	if (typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
-		provider = web3.currentProvider;
+		let provider = web3.currentProvider;
 		//let provider2 = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
 
 		let web3Initiated = new Web3(provider);

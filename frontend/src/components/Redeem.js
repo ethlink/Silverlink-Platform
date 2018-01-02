@@ -27,11 +27,9 @@ class Redeem extends Component {
 		event.preventDefault();
 
 		this.props.LNKSExchange.deployed().then(exchange => {
-			console.log("Exchange address:", exchange.address);
-
 			exchange.redeem(this.state.amount*1000, {
 				from: this.props.account,
-				gas: 150000
+				gas: 200000
 			}).then(receipt => {
 				console.log('receipt', receipt);
 

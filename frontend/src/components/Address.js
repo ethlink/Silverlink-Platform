@@ -6,7 +6,7 @@ class Address extends Component {
 	render() {
 		return (
 
-			<div ID="ADDRESS" className="row text-center col-sm-6" >
+			<div id="ADDRESS" className="row text-center col-sm-6" >
 				<h4><center><font color="#AAABAD">Your Address:</font></center></h4> <h5><font color="black">{this.props.account}</font></h5>
 			</div>
 		);

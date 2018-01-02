@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { initWeb3, initLNKSTokenContract, initLNKSExchangeContract, fetchAccount } from '../actions';
+import * as actions from '../actions';
 
 import 'antd/dist/antd.css';
 
 import Header from '../containers/Header';
-import Balance from './Balance';
-import Address from './Address';
-import CoinStats from './CoinStats';
-import ExchangeStats from './ExchangeStats';
-import BuyDirect from './BuyDirect';
-import Redeem from './Redeem';
 import Status from './Status';
-import RecentTransactions from './RecentTransactions';
+
+import Home from './Home';
+import Admin from './Admin';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = { initiated: false, deployed: true }
   }
 
@@ -60,50 +55,29 @@ class App extends Component {
   render() {
     return (
       <div className="app container">
-        <div className="row">
-          <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} />
-          <Header />
-        </div>
-
-        {typeof this.props.LNKSToken  === "function" &&
-         typeof this.props.LNKSExchange  === "function" &&
-         this.state.deployed &&
-         typeof this.props.account === "string" &&
-          this.props.account !== 'empty' ?
+        <BrowserRouter>
           <div>
-            <div className="col-md-15">
-              <Balance />
-
-              <Address />
-
-
-              <CoinStats />
-              <ExchangeStats />
-            </div>
-
             <div className="row">
-              <BuyDirect />
-              <Redeem />
+              <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} />
+              <Header />
             </div>
 
-            <div className="row">
-              <RecentTransactions />
-            </div>
-          </div> : null}
+            {typeof this.props.LNKSToken  === "function" &&
+             typeof this.props.LNKSExchange  === "function" &&
+             this.state.deployed &&
+             typeof this.props.account === "string" &&
+              this.props.account !== 'empty' ?
+              <div>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/admin" component={Admin} />
+              </div> : null}
+          </div>
+        </BrowserRouter>
       </div>
     );
   }
-}
+};
 
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    initWeb3: initWeb3,
-    initLNKSTokenContract: initLNKSTokenContract,
-    initLNKSExchangeContract: initLNKSExchangeContract,
-    fetchAccount: fetchAccount
-  }, dispatch)
-}
 
 function mapStateToProps(state) {
   return {
@@ -114,4 +88,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, actions)(App);

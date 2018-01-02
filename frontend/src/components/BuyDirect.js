@@ -15,7 +15,6 @@ class BuyDirect extends Component {
 			priceGram: '...',
 			priceEth: '...',
 			fee: '...',
-			LNKSExchange: null,
 			success: '',
 			failure: '',
 		}
@@ -26,6 +25,8 @@ class BuyDirect extends Component {
 	}
 
 	componentDidMount() {
+		this.getFee();
+
 		axios.all([
 			axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD'),
 			axios.get('https://www.quandl.com/api/v3/datasets/LBMA/SILVER.json?api_key=y7Pa1CUGkHby28hYKivu')
@@ -43,8 +44,8 @@ class BuyDirect extends Component {
         });
 	}
 
-	getFee(LNKSExchange) {
-		LNKSExchange.deployed().then(exchange => {
+	getFee() {
+		this.props.LNKSExchange.deployed().then(exchange => {
 			exchange.fee()
 				.then(res => {
 					this.setState({
@@ -83,19 +84,13 @@ class BuyDirect extends Component {
 			exchange.buyDirect({
 				from: this.props.account,
 				value: this.props.web3.web3.toWei(this.state.amountEth, 'ether'),
-				gas: 150000
+				gas: 200000
 			}).then(receipt => {
 				this.setState({success: `Success! Transaction hash - ${receipt.tx}`});
 			}).catch(error => {
 				this.setState({failure: error.message});
 			});
 		});
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (this.props.LNKSExchange !== nextProps.LNKSExchange) {
-			this.getFee(nextProps.LNKSExchange);
-		}
 	}
 
 	render() {
