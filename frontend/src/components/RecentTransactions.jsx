@@ -57,7 +57,7 @@ class RecentTransactions extends Component {
     });
 
     return <div id="transactions" className="col-xs-12" style={{marginBottom: 30, marginTop: 30}}>
-      <h4><center><font color="gray">Your Recent Transactions</font></center></h4>
+      <h4><center><font color="gray">All Recent Transactions</font></center></h4>
 
       {transactions.length ?
         <table style={{width: "100%", color: 'gray'}}>
