@@ -9,6 +9,7 @@ import ExchangeStats from './ExchangeStats';
 import BuyDirect from './BuyDirect';
 import Redeem from './Redeem';
 import RecentTransactions from './RecentTransactions';
+import RecentUserTransactions from './RecentUserTransactions';
 
 
 class Home extends Component {
@@ -29,6 +30,7 @@ class Home extends Component {
         </div>
 
         <div className="row">
+          <RecentUserTransactions />
           <RecentTransactions />
         </div>
       </div>
