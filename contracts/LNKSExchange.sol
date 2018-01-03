@@ -137,6 +137,9 @@ contract LNKSExchange is OwnableMultiple {
   function declineRedemption(uint _index) public onlyOwner {
     require(redemptions[_index].amount >= 0);
 
+    Redemption memory redemption = redemptions[_index];
+    token.transfer(redemption.redeemer, redemption.amount);
+
     // remove order from orders array
     redemptions[_index] = redemptions[redemptions.length-1];
     redemptions.length--;
