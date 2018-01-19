@@ -43,7 +43,7 @@ class Redeem extends Component {
 	render() {
 		return (
 			<div id="redeem" className="col-xs-6 col-md-6">
-				<h4><font color="#AAABAD"><center>Redeem Tokens</center></font></h4>
+				<h4><font color="#1890FF"><center>Redeem Tokens</center></font></h4>
 
 				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
 				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>
