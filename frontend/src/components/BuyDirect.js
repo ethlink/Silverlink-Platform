@@ -96,14 +96,14 @@ class BuyDirect extends Component {
 	render() {
 		return (
 			<div id="buydirect" className="col-xs-6 col-md-6">
-				<h4><center><font color="#AAABAD">Buy Direct</font></center></h4>
+				<h4><center><font color="#1890FF">Buy Direct</font></center></h4>
 
 				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
 				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>
 
-				<h5><font size="2"><font color="black">1 ETH= {this.state.priceEth} USD</font></font></h5>
-				<h5><font size="2"><font color="black">Silver Gram Price=<font color="green"> {this.state.priceGram} USD</font></font></font></h5>
-				<h5><font size="2"><font color="black">{this.state.amountEth ? this.state.amountEth : 0} ETH = {this.state.amountTokens} LNKS</font></font></h5>
+				<h5><font size="2"><font color="white">1 ETH= </font><font color="#1890FF">{this.state.priceEth} USD</font></font></h5>
+				<h5><font size="2"><font color="white">Silver Gram Price=</font><font color="#1890FF"> {this.state.priceGram} USD</font></font></h5>
+				<h5><font size="2"><font color="white">{this.state.amountEth ? this.state.amountEth : 0}</font> ETH =<font color="#1890FF"> {this.state.amountTokens} LNKS</font></font></h5>
 
 				<Form onSubmit={this.handleSubmit}>
 			        <FormItem>
