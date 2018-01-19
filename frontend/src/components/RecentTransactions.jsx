@@ -49,15 +49,15 @@ class RecentTransactions extends Component {
   render() {
     let transactions = this.state.transactions.map(transaction => {
       return <tr key={transaction.hash}>
-        <td><font color="black">{transaction.hash}</font></td>
-        <td><font color="black">{transaction.amount} ETH</font></td>
-        <td><font color="black">{transaction.type}</font></td>
-        <td><font color="black">{transaction.time}</font></td>
+        <td><font color="white">{transaction.hash}</font></td>
+        <td><font color="white">{transaction.amount} ETH</font></td>
+        <td><font color="white">{transaction.type}</font></td>
+        <td><font color="white">{transaction.time}</font></td>
       </tr>;
     });
 
     return <div id="transactions" className="col-xs-12" style={{marginBottom: 30, marginTop: 30}}>
-      <h4><center><font color="gray">All Recent Transactions</font></center></h4>
+      <h4><center><font color="#1890FF">Recent Network Transactions</font></center></h4>
 
       {transactions.length ?
         <table style={{width: "100%", color: 'gray'}}>
@@ -76,7 +76,7 @@ class RecentTransactions extends Component {
         </table>
         :
         <div style={{textAlign: "center"}}>
-          <h5 style={{color: "#000", marginTop: "25px"}}>No recent transactions</h5>
+          <h5 style={{color: "GRAY", marginTop: "25px"}}>No recent transactions</h5>
         </div>
       }
     </div>;
