@@ -4,7 +4,7 @@ const Header = () => (
 	<div className="header container">
 		<div className="row">
 			<div id="header" className="col-xs-12">
-				<h5 style={{color: "gray"}}>Silver Link Platform</h5>
+<h2 style={{color: "#ccc", weight: "700"}}>SILVER LINK</h2>
 			</div>
 		</div>
 	</div>
