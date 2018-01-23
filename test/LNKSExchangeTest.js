@@ -97,7 +97,7 @@ contract('LNKSToken', function(accounts) {
     let balance = await token.balanceOf.call(accounts[0])
     assert.strictEqual(balance.toNumber(), value)
 
-  	await exchange.redeem(value, {from: accounts[0]})
+  	await exchange.redeem(value, 'Random street', {from: accounts[0]})
 
    	let redemptionsLength = await exchange.getRedemptionsLength.call()
   	assert.strictEqual(redemptionsLength.toNumber(), 1, 'number of redemptions should be 1')
@@ -132,7 +132,7 @@ contract('LNKSToken', function(accounts) {
   	})
 
   	return expectThrow(exchange.approveOrder(0, parseInt(value * exchangeRate), {
-      from: accounts[3]
+      from: accounts[2]
     }));
   });
 
@@ -140,10 +140,10 @@ contract('LNKSToken', function(accounts) {
     const value = 10000
 
   	token.mint(accounts[0], value)
-  	await exchange.redeem(value, {from: accounts[0]})
+  	await exchange.redeem(value, 'Random address', {from: accounts[0]})
 
     return expectThrow(exchange.approveRedemption(0, {
-      from: accounts[3]
+      from: accounts[2]
     }));
   });
 

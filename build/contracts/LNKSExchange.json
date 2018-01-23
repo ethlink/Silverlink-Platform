@@ -1212,8 +1212,59 @@
       "links": {},
       "address": "0x3262bc40cc6bed8c8862089b0d7f6fdfc707b7f6",
       "updated_at": 1516725211398
+    },
+    "1516728847258": {
+      "events": {
+        "0x2c33c574213feb1047a6378e9beca724f8bda16b6624875a6dee2edb3edfcdb6": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "_buyer",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_timestamp",
+              "type": "uint256"
+            }
+          ],
+          "name": "BuyDirectEvent",
+          "type": "event"
+        },
+        "0x0e46a0c191564864bd7a70f14ef566cba8f8494211c829a52275f65d5b7d4ce2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "_redeember",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_amount",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_timestamp",
+              "type": "uint256"
+            }
+          ],
+          "name": "RedeemEvent",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x97b46f89d5cb69b448dd13398081a088000d52d7",
+      "updated_at": 1516728868222
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1516725211398
+  "updated_at": 1516728868222
 }
