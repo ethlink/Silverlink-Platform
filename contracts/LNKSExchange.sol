@@ -16,6 +16,7 @@ contract LNKSExchange is OwnableMultiple {
 
   struct Redemption {
     address redeemer;
+    string location;
     uint amount;
     uint timestamp;
   }
@@ -104,7 +105,7 @@ contract LNKSExchange is OwnableMultiple {
     return orders.length;
   }
 
-  function redeem(uint _value) public returns (uint) {
+  function redeem(uint _value, string _location) public returns (uint) {
     require(token.balanceOf(msg.sender) >= _value);
 
     // Approve tokens transfer from sender to exchange vault
@@ -115,6 +116,7 @@ contract LNKSExchange is OwnableMultiple {
     Redemption memory redemption = Redemption({
       redeemer: msg.sender,
       amount: _value,
+      location: _location,
       timestamp: block.timestamp
     });
 
@@ -149,9 +151,14 @@ contract LNKSExchange is OwnableMultiple {
     return redemptions.length;
   }
 
-  function getRedemption(uint _index) public constant onlyOwner returns (address, uint, uint) {
+  function getRedemption(uint _index) public constant onlyOwner returns (address, uint, string, uint) {
     Redemption memory redemption = redemptions[_index];
-    return (redemption.redeemer, redemption.amount, redemption.timestamp);
+    return (
+      redemption.redeemer,
+      redemption.amount,
+      redemption.location,
+      redemption.timestamp
+    );
   }
 
   function withdraw(address _to, uint _amount) public onlyOwner {

@@ -29,7 +29,7 @@ class Admin extends Component {
             {this.state.isOwner ?
               <div>
                 <div className="col-xs-12">
-                  <h3>Orders</h3>
+                  <h3 style={{marginTop: 30}}>Orders</h3>
                   <OrdersAdmin />
                 </div>
 
@@ -38,7 +38,7 @@ class Admin extends Component {
                   <RedeemsAdmin />
                 </div>
               </div> :
-              <h2>This area is admin only</h2>
+              <div className="col-xs-12"><h2>This area is admin only</h2></div>
             }
           </div>
       </div>

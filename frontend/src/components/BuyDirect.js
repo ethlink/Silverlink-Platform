@@ -95,15 +95,15 @@ class BuyDirect extends Component {
 
 	render() {
 		return (
-			<div id="buydirect" className="col-xs-6 col-md-6">
-				<h4><center><font color="#1890FF">Buy Direct</font></center></h4>
+			<div id="buydirect">
+				<h4>Buy Direct</h4>
 
 				<p style={{color: "green"}}>{this.state.success ? this.state.success : null}</p>
 				<p style={{color: "red"}}>{this.state.failure ? this.state.failure : null}</p>
 
-				<h5><font size="2"><font color="white">1 ETH= </font><font color="#1890FF">{this.state.priceEth} USD</font></font></h5>
-				<h5><font size="2"><font color="white">Silver Gram Price=</font><font color="#1890FF"> {this.state.priceGram} USD</font></font></h5>
-				<h5><font size="2"><font color="white">{this.state.amountEth ? this.state.amountEth : 0}</font> ETH =<font color="#1890FF"> {this.state.amountTokens} LNKS</font></font></h5>
+				<h5><font size="2"><font color="white">1 ETH = </font><font color="#64b0ed">{this.state.priceEth} USD</font></font></h5>
+				<h5><font size="2"><font color="white">Silver Gram Price = </font><font color="#64b0ed"> {this.state.priceGram} USD</font></font></h5>
+				<h5><font size="2"><font color="white">{this.state.amountEth ? this.state.amountEth : 0}</font> ETH = <font color="#64b0ed"> {this.state.amountTokens} LNKS</font></font></h5>
 
 				<Form onSubmit={this.handleSubmit}>
 			        <FormItem>
@@ -111,7 +111,7 @@ class BuyDirect extends Component {
 			        </FormItem>
 
 					<Button type="primary" htmlType="submit">Buy tokens</Button>
-					<h6 style={{marginTop: 5}}>* Fee: {this.state.fee} (for first time buyers)</h6>
+					<h6>* Fee: {this.state.fee} (for first time buyers)</h6>
 				</Form>
 			</div>
 		);

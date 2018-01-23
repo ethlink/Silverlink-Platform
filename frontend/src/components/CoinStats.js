@@ -35,11 +35,11 @@ class CoinStats extends Component {
 
 	render() {
 		return (
-			<div id="marketinfo" style={{textAlign: 'center', fontSize: '2'}} className="coin-stats col-xs-12 col-sm-6">
-				<h4><font color="#ccc"><center>Market Info</center></font></h4>
-				<h5><font color="white"><font size="2">Tokens in Circulation:</font></font></h5><h4><font color="#1890FF"> {this.state.supply} LNKS</font></h4>
-				<h5><font color="white"><font size="2">Silver in Reserves:</font></font></h5><h4> <font color="#1890FF">{this.state.kilos} GRAMS</font></h4>
-				<h5><font color="white"><font size="2">Certificates:</font></font></h5><h4><font color="#1890FF"> ???</font></h4>
+			<div id="marketinfo" style={{textAlign: 'center'}} className="coin-stats">
+				<h4>Market Info</h4>
+				<h5>Tokens in Circulation: <span className="datum">{this.state.supply} LNKS</span></h5>
+				<h5>Silver in Reserves: <span className="datum">{this.state.kilos} GRAMS</span></h5>
+				<h5>Certificates: <span className="datum">???</span></h5>
 			</div>
 		);
 	}

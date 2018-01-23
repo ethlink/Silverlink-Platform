@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 class Address extends Component {
 	render() {
 		return (
-
-			<div id="address" className="row text-center col-sm-6" >
-				<h4><center><font color="#ccc">Your Address:</font></center></h4> <h5><font color="#fff">{this.props.account}</font></h5>
+			<div id="address" className="text-center">
+				<h4>Your Address</h4>
+				<h5><span className="datum">{this.props.account}</span></h5>
 			</div>
 		);
 	}

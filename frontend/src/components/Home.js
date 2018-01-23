@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 import * as actions from '../actions';
 
 import Balance from './Balance';
 import Address from './Address';
 import CoinStats from './CoinStats';
 import ExchangeStats from './ExchangeStats';
-import BuyDirect from './BuyDirect';
-import Redeem from './Redeem';
 import RecentTransactions from './RecentTransactions';
 import RecentUserTransactions from './RecentUserTransactions';
 
@@ -16,22 +15,34 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div className="col-md-15">
-          <Balance />
-          <Address />
+        <div className="row">
+          <div className="col-xs-12 col-sm-6">
+            <CoinStats />
+          </div>
 
-          <CoinStats />
-          <ExchangeStats />
+          <div className="col-xs-12 col-sm-6" id="buy-redeem-link-container">
+            <Link to="/buy-redeem" id="buy-redeem-link" className="ant-btn ant-btn-primary">Buy and Redeem</Link>
+          </div>
         </div>
 
-        <div className="row">
-          <BuyDirect />
-          <Redeem />
-        </div>
+        <hr style={{margin: "15px 0 0 0", borderBottom: "2px solid #fff"}} />
 
         <div className="row">
-          <RecentUserTransactions />
-          <RecentTransactions />
+          <div className="col-xs-12 col-sm-6">
+            <Address />
+          </div>
+
+          <div className="col-xs-12 col-sm-6">
+            <Balance />
+          </div>
+        </div>
+
+        <hr style={{margin: "15px 0 0 0", borderBottom: "2px solid #fff"}} />
+
+        <div className="row">
+          <div className="col-xs-12">
+            <RecentTransactions />
+          </div>
         </div>
       </div>
     );

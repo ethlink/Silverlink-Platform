@@ -10,6 +10,7 @@ import Status from './Status';
 
 import Home from './Home';
 import Admin from './Admin';
+import BuyRedeem from './BuyRedeem';
 
 
 class App extends Component {
@@ -57,10 +58,8 @@ class App extends Component {
       <div className="app container">
         <BrowserRouter>
           <div>
-            <div className="row">
-              <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} />
-              <Header />
-            </div>
+            <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} />
+            <Header />
 
             {typeof this.props.LNKSToken  === "function" &&
              typeof this.props.LNKSExchange  === "function" &&
@@ -69,6 +68,7 @@ class App extends Component {
               this.props.account !== 'empty' ?
               <div>
                 <Route exact path="/" component={Home} />
+                <Route exact path="/buy-redeem" component={BuyRedeem} />
                 <Route exact path="/admin" component={Admin} />
               </div> : null}
           </div>

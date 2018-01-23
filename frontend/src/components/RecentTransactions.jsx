@@ -57,12 +57,12 @@ class RecentTransactions extends Component {
     });
 
     return <div id="transactions" className="col-xs-12" style={{marginBottom: 30, marginTop: 30}}>
-      <h4><center><font color="#1890FF">Recent Network Transactions</font></center></h4>
+      <h4 style={{marginTop: 0, marginBottom: '30px'}}>Recent Network Transactions</h4>
 
       {transactions.length ?
-        <table style={{width: "100%", color: 'gray'}}>
+        <table style={{width: '100%', fontWeight: 300}}>
           <thead>
-            <tr>
+            <tr style={{fontWeight: 300}}>
               <th>Tx Hash</th>
               <th>Amount</th>
               <th>Type</th>
@@ -75,8 +75,8 @@ class RecentTransactions extends Component {
           </tbody>
         </table>
         :
-        <div style={{textAlign: "center"}}>
-          <h5 style={{color: "GRAY", marginTop: "25px"}}>No recent transactions</h5>
+        <div style={{textAlign: 'center'}}>
+          <h5 style={{marginTop: '25px'}}>No recent transactions</h5>
         </div>
       }
     </div>;

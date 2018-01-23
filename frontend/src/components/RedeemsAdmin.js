@@ -34,12 +34,15 @@ class RedeemsAdmin extends Component {
           for (let i = 0; i < total.toNumber(); i++) {
             exchange.getRedemption(i, {from: this.props.account})
               .then(res => {
+                console.log(res);
+
                 let redemptions = this.state.redemptions;
                 redemptions.push({
                   key: i,
                   address: res[0],
+                  location: res[2],
                   amount: res[1].toNumber() / 1000 + ' LNKS',
-                  time: moment.unix(res[2].toNumber()).fromNow()
+                  time: moment.unix(res[3].toNumber()).fromNow()
                 });
 
                 this.setState({
@@ -108,6 +111,11 @@ class RedeemsAdmin extends Component {
               key="address"
             />
             <Column
+              title="Location"
+              dataIndex="location"
+              key="location"
+            />
+            <Column
               title="Amount"
               dataIndex="amount"
               key="amount"
@@ -123,7 +131,7 @@ class RedeemsAdmin extends Component {
               render={(text, record) => (
                 <span>
                   <Button onClick={this.decline.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Approve</Button>
-                  <Divider type="vertical" />
+                  <Divider type="horizontal" />
                   <Button onClick={this.decline.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Decline</Button>
                 </span>
               )}

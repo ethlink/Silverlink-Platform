@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => (
-	<div className="header container">
-		<div className="row">
-			<div id="header" className="col-xs-12">
-<h2 style={{color: "#ccc", weight: "700"}}>SILVER LINK</h2>
-			</div>
+	<div className="row">
+		<div id="header" className="col-xs-12">
+			<Link to="/">
+				<h2>SILVER LINK PLATFORM</h2>
+			</Link>
 		</div>
 	</div>
 );
