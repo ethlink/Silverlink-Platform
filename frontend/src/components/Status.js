@@ -8,7 +8,7 @@ class Status extends Component {
       return null;
 
     return (
-      <div id="status" className="col-xs-12" style={{marginTop: 15}}>
+      <div id="status" style={{marginTop: 15}}>
         {!this.props.web3 ?
           <div className="alert alert-danger" role="alert">
             <strong>Warning!</strong> This application will not work without Metamask extension enabled. See download links for <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank" rel="noopener noreferrer">Chrome</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/" target="_blank" rel="noopener noreferrer">Firefox</a>. Once enabled, refresh the website.
