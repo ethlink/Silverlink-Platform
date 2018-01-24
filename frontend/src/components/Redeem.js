@@ -59,7 +59,7 @@ class Redeem extends Component {
 				<Form onSubmit={this.handleSubmit}>
 					<FormItem>
 			    	<Input type="number" onChange={this.handleChange} value={this.state.amount} name="amount" placeholder="Amount to redeem" />
-						<Input type="text" onChange={this.handleChange} value={this.state.street} name="street" placeholder="street" style={{marginTop: 10}} />
+						<Input type="text" onChange={this.handleChange} value={this.state.street} name="street" placeholder="Street" style={{marginTop: 10}} />
 						<Input type="text" onChange={this.handleChange} value={this.state.city} name="city" placeholder="City" style={{marginTop: 10}} />
 						<Input type="text" onChange={this.handleChange} value={this.state.state} name="state" placeholder="State" style={{marginTop: 10}} />
 						<Input type="text" onChange={this.handleChange} value={this.state.zip} name="zip" placeholder="Zip" style={{marginTop: 10}} />
