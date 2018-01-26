@@ -10,15 +10,17 @@
 6. From new terminal window go to `/frontend` folder and run `npm start`.
 7. If you have Metamask enabled, you will see account address and its balance
 
-
 # Test token
 
 ## Setup
 
 1. LNKSToken.deployed().then(function(instance) {token=instance;})
 2. LNKSExchange.deployed().then(function(instance) {exchange=instance;})
-3. token.mint(web3.eth.accounts[0],100)
-4. exchange.setTokenAddress(token.address)
+3. let acc;
+4. web3.eth.getAccounts((err, res) => acc = res[0])
+5. token.mint(acc,100)
+6. exchange.setTokenAddress(token.address)
+7. token.addOwner(exchange.address)
 
 ## Buy direct
 
@@ -26,13 +28,12 @@
 2. exchange.getOrdersLength.call()
 3. exchange.getOrder.call(0)
 4. Assume 1 ETH = 100 TOKENS (7.77 ETH = 777 TOKENS)
-5. token.addOwner(exchange.address)
-6. exchange.approveOrder(0, 777)
-7. token.balanceOf(web3.eth.accounts[1])
+5. exchange.approveOrder(0, 777)
+6. token.balanceOf(web3.eth.accounts[1])
 
 ## Redeem
 
-1. exchange.redeem(50)
+1. exchange.redeem(50, 'random address')
 2. exchange.getRedemptionsLength()
 
 # Deployment on Rinkeby
