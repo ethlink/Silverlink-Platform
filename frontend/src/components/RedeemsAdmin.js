@@ -57,14 +57,20 @@ class RedeemsAdmin extends Component {
   approve(idx) {
     this.setState({wait: true});
 
+    console.log("APPROVE", idx);
+
     this.props.LNKSExchange.deployed().then(exchange => {
       exchange.approveRedemption(idx, {
         from: this.props.account,
-				gas: 150000
+				gas: 250000
       })
       .then(res => {
+        console.log("RES", res);
+
         setTimeout(() => {
           clearInterval(this.interval);
+
+          console.log("RES", res);
 
           this.setState({wait: false});
           this.fetchRedemptions();
@@ -83,7 +89,7 @@ class RedeemsAdmin extends Component {
     this.props.LNKSExchange.deployed().then(exchange => {
       exchange.declineRedemption(idx, {
         from: this.props.account,
-        gas: 150000
+        gas: 250000
       })
       .then(res => {
         clearInterval(this.interval);
@@ -130,7 +136,7 @@ class RedeemsAdmin extends Component {
               key="action"
               render={(text, record) => (
                 <span>
-                  <Button onClick={this.decline.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Approve</Button>
+                  <Button onClick={this.approve.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Approve</Button>
                   <Divider type="horizontal" />
                   <Button onClick={this.decline.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Decline</Button>
                 </span>
