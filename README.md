@@ -33,7 +33,7 @@
 
 ## Redeem
 
-1. exchange.redeem(50)
+1. exchange.redeem(50, 'random address')
 2. exchange.getRedemptionsLength()
 
 # Deployment on Rinkeby
