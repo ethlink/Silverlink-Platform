@@ -11,6 +11,7 @@ import Status from './Status';
 import Home from './Home';
 import Admin from './Admin';
 import BuyRedeem from './BuyRedeem';
+import Checkbox from './Checkbox';
 
 
 class App extends Component {
@@ -58,8 +59,10 @@ class App extends Component {
       <div className="app container">
         <BrowserRouter>
           <div>
-            <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} />
+            <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} {...this.props} />
             <Header />
+
+            <Route exact path="/" component={Checkbox} />
 
             {typeof this.props.LNKSToken  === "function" &&
              typeof this.props.LNKSExchange  === "function" &&
@@ -67,7 +70,7 @@ class App extends Component {
              typeof this.props.account === "string" &&
               this.props.account !== 'empty' ?
               <div>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/app" component={Home} />
                 <Route exact path="/buy-redeem" component={BuyRedeem} />
                 <Route exact path="/admin" component={Admin} />
               </div> : null}

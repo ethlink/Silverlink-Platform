@@ -1,0 +1,38 @@
+#box{
+  margin-top:30px;
+
+  h1,h2,h3,h4,h5,h6,p,label {color: rgba(0, 0, 0, 0.65) !important; }
+
+  td {
+      text-align: center; /* center checkbox horizontally */
+      vertical-align: middle; /* center checkbox vertically */
+  }
+
+  table {
+      width: 200px;
+  }
+
+  tr {
+      height: 80px;
+  }
+
+  #header1 {
+    border-radius: 15px;
+    background-color:#FFF!important;
+    width:15%;
+    margin: 0 auto;
+    padding-top:1.5%;
+    padding-bottom:1.5%;
+    margin-bottom:0.3%;
+  }
+
+
+  .container {
+    padding-top: 30px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    margin: 1px;
+    vertical-align: middle;
+  }
+}
