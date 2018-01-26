@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import OrdersAdmin from './OrdersAdmin';
 import RedeemsAdmin from './RedeemsAdmin';
+import Certificates from './Certificates';
 
 
 class Admin extends Component {
@@ -36,6 +37,11 @@ class Admin extends Component {
                 <div className="col-xs-12">
                   <h3 style={{marginTop: 30}}>Redeems</h3>
                   <RedeemsAdmin />
+                </div>
+
+                <div className="col-xs-12">
+                  <h3 style={{marginTop: 30}}>Certificates</h3>
+                  <Certificates />
                 </div>
               </div> :
               <div className="col-xs-12"><h2>This area is admin only</h2></div>
