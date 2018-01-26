@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 class Status extends Component {
   render() {
-    if (!this.props.initiated)
+    if (!this.props.initiated || window.location.pathname === "/")
       return null;
 
     return (

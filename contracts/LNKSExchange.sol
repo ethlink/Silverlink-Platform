@@ -26,6 +26,7 @@ contract LNKSExchange is OwnableMultiple {
   mapping(address => bool) usedAddresses;
   Order[] orders;
   Redemption[] redemptions;
+  uint public totalCertificateSupply;
 
   function LNKSExchange(address _tokenAddress) {
     token = LNKSToken(_tokenAddress);
