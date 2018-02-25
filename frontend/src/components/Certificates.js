@@ -1,73 +1,142 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ipfsAPI from 'ipfs-api';
-import { Button } from 'antd';
+import { Table, Divider, Form, Input, Button } from 'antd';
+const { Column } = Table;
 
 
 class Certficates extends Component {
   constructor () {
     super()
     this.state = {
-      added_file_hash: null,
-      file: null
+      certificates: [],
+      url: '',
+      amount: null
     }
-    this.ipfsApi = ipfsAPI('localhost', '5001')
 
-    this.captureFile = this.captureFile.bind(this)
-    this.saveToIpfs = this.saveToIpfs.bind(this)
-    this.arrayBufferToString = this.arrayBufferToString.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.fetchCertificates = this.fetchCertificates.bind(this);
+    this.deleteCertificate = this.deleteCertificate.bind(this);
   }
 
-  captureFile (event) {
-    event.stopPropagation()
+  componentDidMount() {
+    this.fetchCertificates();
+    this.interval = setInterval(() => this.fetchCertificates(), 30000);
+  }
+
+  handleSubmit(event) {
     event.preventDefault()
 
-    const file = event.target.files[0]
-    this.setState({file})
+    this.props.LNKSExchange.deployed().then(exchange => {
+			exchange.addCertificate(
+        this.state.url,
+        this.state.amount,
+        {
+  				from: this.props.account,
+  				gas: 300000
+  			}).then(receipt => {
+          setTimeout(() => {
+            this.fetchCertificates();
+          }, 1000);
+
+          this.setState({
+            url: '',
+            amount: null
+          })
+  			}).catch(error => {
+          alert(error.message);
+  			});
+		});
   }
 
-  saveToIpfs (reader) {
-    let ipfsId
-    const buffer = Buffer.from(reader.result)
+  handleChange(event) {
+		const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
 
-    this.ipfsApi.files.add(buffer, { progress: (prog) => console.log(`received: ${prog}`) })
-      .then((response) => {
-        console.log(response)
-        ipfsId = response[0].hash
-        console.log(ipfsId)
-        this.setState({added_file_hash: ipfsId})
-      }).catch((err) => {
-        console.error(err)
-      })
+    this.setState({
+      [name]: value
+    });
+	}
+
+  fetchCertificates() {
+    this.setState({certificates: []});
+
+    this.props.LNKSExchange.deployed().then(exchange => {
+			exchange.getCertificatesLength({from: this.props.account})
+				.then(total => {
+          for (let i = 0; i < total.toNumber(); i++) {
+            exchange.getCertificate(i, {from: this.props.account})
+              .then(res => {
+                let certificates = this.state.certificates;
+
+                certificates.push({
+                  key: i,
+                  url: res[0],
+                  amount: res[1].toNumber()
+                });
+
+                this.setState({
+                  certificates: certificates
+                })
+              });
+          }
+				});
+		});
   }
 
-  arrayBufferToString (arrayBuffer) {
-    return String.fromCharCode.apply(null, new Uint16Array(arrayBuffer))
-  }
-
-  handleSubmit (event) {
-    event.preventDefault()
-
-    let reader = new window.FileReader()
-
-    reader.onloadend = () => this.saveToIpfs(reader)
-    reader.readAsArrayBuffer(this.state.file)
+  deleteCertificate(key) {
+    this.props.LNKSExchange.deployed().then(exchange => {
+			exchange.deleteCertificate(
+        key,
+        {
+  				from: this.props.account,
+  				gas: 300000
+  			}).then(receipt => {
+          setTimeout(() => {
+            this.fetchCertificates();
+          }, 1000);
+  			}).catch(error => {
+          alert(error.message);
+  			});
+		});
   }
 
   render() {
     return (
-      <div className="certificates-admin">
-        {this.state.added_file_hash &&
-          <div>
-            <p>File added to <a href={`https://ipfs.io/ipfs/${this.state.added_file_hash}`}>https://ipfs.io/ipfs/${this.state.added_file_hash}</a></p>
-          </div>
-        }
+      <div className="redeems-admin">
+        <div>
+          <Form onSubmit={this.handleSubmit}>
+			    	<Input type="text" onChange={this.handleChange} value={this.state.url} name="url" placeholder="Certificate URL" />
+						<Input type="number" onChange={this.handleChange} value={this.state.amount} name="amount" placeholder="Amount it represents" style={{marginTop: 10}} />
 
-        <form id='captureMedia' onSubmit={this.handleSubmit}>
-          <input type='file' onChange={this.captureFile} />
-          <Button htmlType='submit' type="primary" style={{marginTop: 15}}>Upload file to IPFS</Button>
-        </form>
+  					<Button type="primary" htmlType="submit" style={{marginTop: 10, marginBottom: 30}}>Add certificate</Button>
+  				</Form>
+
+          <Table dataSource={this.state.certificates}>
+            <Column
+              title="URL"
+              dataIndex="url"
+              key="url"
+            />
+            <Column
+              title="Amount"
+              dataIndex="amount"
+              key="amount"
+            />
+            <Column
+              title="Delete?"
+              key="action"
+              render={(text, record) => (
+                <span>
+                  <Button onClick={this.deleteCertificate.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>
+                    Delete
+                  </Button>
+                </span>
+              )}
+            />
+          </Table>
+        </div>
       </div>
     );
   }

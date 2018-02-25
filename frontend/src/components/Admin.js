@@ -22,8 +22,6 @@ class Admin extends Component {
   }
 
   render() {
-    console.log(this.state.isOwner);
-
     return (
       <div>
           <div className="row">

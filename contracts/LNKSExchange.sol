@@ -21,11 +21,18 @@ contract LNKSExchange is OwnableMultiple {
     uint timestamp;
   }
 
+  struct Certificate {
+    string url;
+    uint amount;
+    uint timestamp;
+  }
+
   LNKSToken public token;
   uint public fee;
   mapping(address => bool) usedAddresses;
   Order[] orders;
   Redemption[] redemptions;
+  Certificate[] certificates;
   uint public totalCertificateSupply;
 
   function LNKSExchange(address _tokenAddress) {
@@ -160,6 +167,36 @@ contract LNKSExchange is OwnableMultiple {
       redemption.location,
       redemption.timestamp
     );
+  }
+
+  function addCertificate(string _url, uint _amount) public onlyOwner {
+    Certificate memory certificate = Certificate({
+      url: _url,
+      amount: _amount,
+      timestamp: block.timestamp
+    });
+
+    certificates.push(certificate);
+  }
+
+  function getCertificatesLength() public constant onlyOwner returns (uint) {
+    return certificates.length;
+  }
+
+  function getCertificate(uint _index) public constant onlyOwner returns (string, uint, uint) {
+    Certificate memory certificate = certificates[_index];
+    return (
+      certificate.url,
+      certificate.amount,
+      certificate.timestamp
+    );
+  }
+
+  function deleteCertificate(uint _index) public onlyOwner {
+    require(certificates[_index].amount >= 0);
+
+    certificates[_index] = certificates[certificates.length-1];
+    certificates.length--;
   }
 
   function withdraw(address _to, uint _amount) public onlyOwner {

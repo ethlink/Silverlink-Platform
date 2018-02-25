@@ -25,12 +25,8 @@ class RedeemsAdmin extends Component {
     this.setState({redemptions: []});
 
     this.props.LNKSExchange.deployed().then(exchange => {
-      console.log("Exchange address:", exchange.address);
-
 			exchange.getRedemptionsLength({from: this.props.account})
 				.then(total => {
-          console.log(total);
-
           for (let i = 0; i < total.toNumber(); i++) {
             exchange.getRedemption(i, {from: this.props.account})
               .then(res => {
