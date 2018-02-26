@@ -1,66 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Divider, Form, Input, Button } from 'antd';
-const { Column } = Table;
+import moment from 'moment';
 
 
-class Certficates extends Component {
-  constructor () {
-    super()
-    this.state = {
-      certificates: [],
-      url: '',
-      amount: null
-    }
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+class Certificates extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { certificates: [] };
     this.fetchCertificates = this.fetchCertificates.bind(this);
-    this.deleteCertificate = this.deleteCertificate.bind(this);
   }
 
   componentDidMount() {
     this.fetchCertificates();
-    this.interval = setInterval(() => this.fetchCertificates(), 30000);
   }
-
-  handleSubmit(event) {
-    event.preventDefault()
-
-    this.props.LNKSExchange.deployed().then(exchange => {
-			exchange.addCertificate(
-        this.state.url,
-        this.state.amount,
-        {
-  				from: this.props.account,
-  				gas: 300000
-  			}).then(receipt => {
-          setTimeout(() => {
-            this.fetchCertificates();
-          }, 1000);
-
-          this.setState({
-            url: '',
-            amount: null
-          })
-  			}).catch(error => {
-          alert(error.message);
-  			});
-		});
-  }
-
-  handleChange(event) {
-		const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-	}
 
   fetchCertificates() {
-    this.setState({certificates: []});
+    this.setState({redemptions: []});
 
     this.props.LNKSExchange.deployed().then(exchange => {
 			exchange.getCertificatesLength({from: this.props.account})
@@ -73,7 +28,8 @@ class Certficates extends Component {
                 certificates.push({
                   key: i,
                   url: res[0],
-                  amount: res[1].toNumber()
+                  amount: res[1].toNumber(),
+                  timestamp: res[2].toNumber()
                 });
 
                 this.setState({
@@ -85,60 +41,38 @@ class Certficates extends Component {
 		});
   }
 
-  deleteCertificate(key) {
-    this.props.LNKSExchange.deployed().then(exchange => {
-			exchange.deleteCertificate(
-        key,
-        {
-  				from: this.props.account,
-  				gas: 300000
-  			}).then(receipt => {
-          setTimeout(() => {
-            this.fetchCertificates();
-          }, 1000);
-  			}).catch(error => {
-          alert(error.message);
-  			});
-		});
-  }
-
   render() {
-    return (
-      <div className="redeems-admin">
-        <div>
-          <Form onSubmit={this.handleSubmit}>
-			    	<Input type="text" onChange={this.handleChange} value={this.state.url} name="url" placeholder="Certificate URL" />
-						<Input type="number" onChange={this.handleChange} value={this.state.amount} name="amount" placeholder="Amount it represents" style={{marginTop: 10}} />
+    let certificates = this.state.certificates.map(certificate => {
+      return <tr key={certificate.timestamp}>
+        <td><font color="white"><a href={certificate.url} style={{color:'white'}} target="_blank">{certificate.url}</a></font></td>
+        <td><font color="white">{certificate.amount} ETH</font></td>
+        <td><font color="white">{moment.unix(certificate.timestamp).fromNow()}</font></td>
+      </tr>;
+    });
 
-  					<Button type="primary" htmlType="submit" style={{marginTop: 10, marginBottom: 30}}>Add certificate</Button>
-  				</Form>
+    return <div id="certificates" className="col-xs-12" style={{marginBottom: 15, marginTop: 30}}>
+      <h4 style={{marginTop: 0}}>Certificates</h4>
 
-          <Table dataSource={this.state.certificates}>
-            <Column
-              title="URL"
-              dataIndex="url"
-              key="url"
-            />
-            <Column
-              title="Amount"
-              dataIndex="amount"
-              key="amount"
-            />
-            <Column
-              title="Delete?"
-              key="action"
-              render={(text, record) => (
-                <span>
-                  <Button onClick={this.deleteCertificate.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>
-                    Delete
-                  </Button>
-                </span>
-              )}
-            />
-          </Table>
+      {certificates.length ?
+        <table style={{width: '100%', fontWeight: 300, marginTop: 30}}>
+          <thead>
+            <tr style={{fontWeight: 300}}>
+              <th>URL</th>
+              <th>Amount</th>
+              <th>Time added</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {certificates}
+          </tbody>
+        </table>
+        :
+        <div style={{textAlign: 'center'}}>
+          <h5 style={{marginTop: '25px'}}>No certificates added</h5>
         </div>
-      </div>
-    );
+      }
+    </div>;
   }
 }
 
@@ -152,4 +86,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Certficates);
+export default connect(mapStateToProps)(Certificates);

@@ -9,6 +9,7 @@ import CoinStats from './CoinStats';
 import ExchangeStats from './ExchangeStats';
 import RecentTransactions from './RecentTransactions';
 import RecentUserTransactions from './RecentUserTransactions';
+import Certificates from './Certificates';
 
 
 class Home extends Component {
@@ -34,6 +35,14 @@ class Home extends Component {
 
           <div className="col-xs-12 col-sm-6">
             <Balance />
+          </div>
+        </div>
+
+        <hr style={{margin: "15px 0 0 0", borderBottom: "2px solid #fff"}} />
+
+        <div className="row">
+          <div className="col-xs-12">
+            <Certificates />
           </div>
         </div>
 
