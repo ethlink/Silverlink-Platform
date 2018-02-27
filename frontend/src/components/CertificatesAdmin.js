@@ -104,7 +104,7 @@ class CertificatesAdmin extends Component {
 
   render() {
     return (
-      <div className="redeems-admin">
+      <div className="redeems-admin" style={{marginBottom: 30}}>
         <div>
           <Form onSubmit={this.handleSubmit}>
 			    	<Input type="text" onChange={this.handleChange} value={this.state.url} name="url" placeholder="Certificate URL" />

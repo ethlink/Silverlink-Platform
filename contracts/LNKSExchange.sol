@@ -176,6 +176,8 @@ contract LNKSExchange is OwnableMultiple {
       timestamp: block.timestamp
     });
 
+    totalCertificateSupply = totalCertificateSupply.add(certificate.amount);
+
     certificates.push(certificate);
   }
 
@@ -194,6 +196,8 @@ contract LNKSExchange is OwnableMultiple {
 
   function deleteCertificate(uint _index) public onlyOwner {
     require(certificates[_index].amount >= 0);
+
+    totalCertificateSupply = totalCertificateSupply.sub(certificates[_index].amount);
 
     certificates[_index] = certificates[certificates.length-1];
     certificates.length--;

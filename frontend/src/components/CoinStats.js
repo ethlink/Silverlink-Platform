@@ -8,7 +8,8 @@ class CoinStats extends Component {
 
 		this.state = {
 			supply: '...',
-			kilos: '...'
+			grams: '...',
+			certificates: '...'
 		}
 
 		this.getCoinStats = this.getCoinStats.bind(this);
@@ -22,8 +23,21 @@ class CoinStats extends Component {
 		this.props.LNKSToken.deployed().then(token => {
 			token.totalSupply().then(supply => {
 				this.setState({
-					supply: supply.toNumber() / 1000,
-					kilos: supply.toNumber() / 1000
+					supply: supply.toNumber() / 1000
+				});
+			});
+		});
+
+		this.props.LNKSExchange.deployed().then(exchange => {
+			exchange.totalCertificateSupply().then(length => {
+				this.setState({
+					grams: length.toNumber()
+				});
+			});
+
+			exchange.getCertificatesLength().then(length => {
+				this.setState({
+					certificates: length.toNumber()
 				});
 			});
 		});
@@ -38,8 +52,8 @@ class CoinStats extends Component {
 			<div id="marketinfo" style={{textAlign: 'center'}} className="coin-stats">
 				<h4>Market Info</h4>
 				<h5>Tokens in Circulation: <span className="datum">{this.state.supply} LNKS</span></h5>
-				<h5>Silver in Reserves: <span className="datum">{this.state.kilos} GRAMS</span></h5>
-				<h5>Certificates: <span className="datum">???</span></h5>
+				<h5>Silver in Reserves: <span className="datum">{this.state.grams} GRAMS</span></h5>
+				<h5>Certificates: <span className="datum">{this.state.certificates}</span></h5>
 			</div>
 		);
 	}
@@ -49,6 +63,7 @@ class CoinStats extends Component {
 function mapStateToProps(state) {
   return {
     LNKSToken: state.LNKSToken,
+		LNKSExchange: state.LNKSExchange,
     account: state.account
   }
 }

@@ -45,7 +45,7 @@ class Certificates extends Component {
     let certificates = this.state.certificates.map(certificate => {
       return <tr key={certificate.timestamp}>
         <td><font color="white"><a href={certificate.url} style={{color:'white'}} target="_blank">{certificate.url}</a></font></td>
-        <td><font color="white">{certificate.amount} ETH</font></td>
+        <td><font color="white">{certificate.amount} grams</font></td>
         <td><font color="white">{moment.unix(certificate.timestamp).fromNow()}</font></td>
       </tr>;
     });
