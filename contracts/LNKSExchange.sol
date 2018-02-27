@@ -203,6 +203,11 @@ contract LNKSExchange is OwnableMultiple {
     certificates.length--;
   }
 
+  function tokensSupplyAvailable() public constant returns (int) {
+    int supply = int(totalCertificateSupply) - int(token.totalSupply());
+    return supply;
+  }
+
   function withdraw(address _to, uint _amount) public onlyOwner {
     _to.transfer(_amount);
   }

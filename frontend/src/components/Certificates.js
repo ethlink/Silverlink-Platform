@@ -28,7 +28,7 @@ class Certificates extends Component {
                 certificates.push({
                   key: i,
                   url: res[0],
-                  amount: res[1].toNumber(),
+                  amount: res[1].toNumber() / 1000,
                   timestamp: res[2].toNumber()
                 });
 

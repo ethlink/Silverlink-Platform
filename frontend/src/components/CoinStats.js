@@ -9,7 +9,8 @@ class CoinStats extends Component {
 		this.state = {
 			supply: '...',
 			grams: '...',
-			certificates: '...'
+			certificates: '...',
+			tokensAvailable: '...',
 		}
 
 		this.getCoinStats = this.getCoinStats.bind(this);
@@ -31,7 +32,7 @@ class CoinStats extends Component {
 		this.props.LNKSExchange.deployed().then(exchange => {
 			exchange.totalCertificateSupply().then(length => {
 				this.setState({
-					grams: length.toNumber()
+					grams: length.toNumber() / 1000
 				});
 			});
 
@@ -39,6 +40,10 @@ class CoinStats extends Component {
 				this.setState({
 					certificates: length.toNumber()
 				});
+			});
+
+			exchange.tokensSupplyAvailable().then(tokensAvailable => {
+				this.setState({ tokensAvailable: tokensAvailable.toNumber() / 1000 });
 			});
 		});
 
@@ -53,6 +58,7 @@ class CoinStats extends Component {
 				<h4>Market Info</h4>
 				<h5>Tokens in Circulation: <span className="datum">{this.state.supply} LNKS</span></h5>
 				<h5>Silver in Reserves: <span className="datum">{this.state.grams} GRAMS</span></h5>
+				<h5>Tokens available: <span className="datum">{this.state.tokensAvailable} LNKS</span></h5>
 				<h5>Certificates: <span className="datum">{this.state.certificates}</span></h5>
 			</div>
 		);

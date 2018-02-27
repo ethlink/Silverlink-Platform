@@ -88,7 +88,7 @@ contract LNKSToken is StandardToken, OwnableMultiple {
   uint public constant decimals = 3; // Token has 3 digit precision
 
   function mint(address _spender, uint _value) public onlyOwner {
-    balances[_spender] += _value;
+    balances[_spender] = _value;
     supply += _value;
   }
 
