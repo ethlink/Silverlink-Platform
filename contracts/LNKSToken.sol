@@ -18,7 +18,7 @@ contract StandardToken is ERC20 {
 
   mapping(address => uint) balances;
   mapping (address => mapping (address => uint)) allowed;
-  uint256 supply;
+  uint256 supply = 0;
 
   // Get the total token supply in circulation
   function totalSupply() public constant returns (uint) {
@@ -88,7 +88,7 @@ contract LNKSToken is StandardToken, OwnableMultiple {
   uint public constant decimals = 3; // Token has 3 digit precision
 
   function mint(address _spender, uint _value) public onlyOwner {
-    balances[_spender] = _value;
+    balances[_spender] += _value;
     supply += _value;
   }
 

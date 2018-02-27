@@ -30,9 +30,9 @@ class CoinStats extends Component {
 		});
 
 		this.props.LNKSExchange.deployed().then(exchange => {
-			exchange.totalCertificateSupply().then(length => {
+			exchange.totalCertificateSupply().then(supply => {
 				this.setState({
-					grams: length.toNumber() / 1000
+					grams: supply.toNumber() / 1000
 				});
 			});
 
