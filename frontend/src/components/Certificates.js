@@ -2,43 +2,67 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
+const SHOW_CERTIFICATES_AT_A_TIME = 6;
 
 class Certificates extends Component {
   constructor(props) {
     super(props);
-    this.state = { certificates: [] };
+    this.state = { certificates: [], showMoreButton: false };
+    this.showMoreClicks = 1;
+
     this.fetchCertificates = this.fetchCertificates.bind(this);
+    this.showMore = this.showMore.bind(this);
   }
 
   componentDidMount() {
-    this.fetchCertificates();
+    this.fetchCertificates(1);
   }
 
   fetchCertificates() {
-    this.setState({ certificates: [] });
+    const certificates = [];
+    const that = this;
+
+    function addCertificate(res, i) {
+      certificates.push({
+        key: i,
+        url: res[0],
+        amount: res[1].toNumber() / 1000,
+        timestamp: res[2].toNumber(),
+      });
+
+      if (i === 0 || certificates.length === that.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME) {
+        that.setState({ certificates });
+      }
+
+      if (i === 0) {
+        that.setState({ showMoreButton: false });
+      }
+    }
 
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.getCertificatesLength({ from: this.props.account })
-        .then((total) => {
-          for (let i = 0; i < total.toNumber(); i += 1) {
+        .then((totalRes) => {
+          const total = totalRes.toNumber();
+
+          if (total > SHOW_CERTIFICATES_AT_A_TIME) {
+            this.setState({ showMoreButton: true });
+          }
+
+          for (let i = total - 1;
+            (i >= total - (this.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME)) && (i >= 0);
+            i -= 1) {
             exchange.getCertificate(i, { from: this.props.account })
               .then((res) => {
-                const { certificates } = this.state;
-
-                certificates.push({
-                  key: i,
-                  url: res[0],
-                  amount: res[1].toNumber() / 1000,
-                  timestamp: res[2].toNumber(),
-                });
-
-                this.setState({
-                  certificates,
-                });
+                addCertificate(res, i);
               });
           }
         });
     });
+  }
+
+  showMore() {
+    this.showMoreClicks += 1;
+    this.fetchCertificates();
   }
 
   render() {
@@ -55,19 +79,31 @@ class Certificates extends Component {
         <h4 style={{ marginTop: 0 }}>Certificates</h4>
 
         {certificates.length ?
-          <table style={{ width: '100%', fontWeight: 300, marginTop: 30 }}>
-            <thead>
-              <tr style={{ fontWeight: 300 }}>
-                <th>URL</th>
-                <th>Amount</th>
-                <th>Time added</th>
-              </tr>
-            </thead>
+          <div>
+            <table style={{ width: '100%', fontWeight: 300, marginTop: 30 }}>
+              <thead>
+                <tr style={{ fontWeight: 300 }}>
+                  <th>URL</th>
+                  <th>Amount</th>
+                  <th>Time added</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              {certificates}
-            </tbody>
-          </table>
+              <tbody>
+                {certificates}
+              </tbody>
+            </table>
+
+            {this.state.showMoreButton &&
+              <button
+                href="#"
+                onClick={this.showMore}
+                className="ant-btn ant-btn-primary"
+                style={{ marginTop: 20 }}
+              >
+                Show more
+              </button>}
+          </div>
         :
           <div style={{ textAlign: 'center' }}>
             <h5 style={{ marginTop: '25px' }}>No certificates added</h5>

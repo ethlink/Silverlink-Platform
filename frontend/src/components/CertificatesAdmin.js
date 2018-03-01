@@ -152,7 +152,7 @@ class CertificatesAdmin extends Component {
               key="action"
               render={(text, record) => (
                 <span>
-                  <Button onClick={this.deleteCertificate(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>
+                  <Button onClick={() => this.deleteCertificate(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>
                     Delete
                   </Button>
                 </span>
