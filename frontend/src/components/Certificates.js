@@ -95,14 +95,17 @@ class Certificates extends Component {
             </table>
 
             {this.state.showMoreButton &&
-              <button
-                href="#"
-                onClick={this.showMore}
-                className="ant-btn ant-btn-primary"
-                style={{ marginTop: 20 }}
-              >
+              <div style={{ textAlign: 'center' }}>
+                <button
+                  href="#"
+                  onClick={this.showMore}
+                  className="ant-btn ant-btn-primary"
+                  style={{ marginTop: 20 }}
+                >
                 Show more
-              </button>}
+                </button>
+              </div>
+            }
           </div>
         :
           <div style={{ textAlign: 'center' }}>
