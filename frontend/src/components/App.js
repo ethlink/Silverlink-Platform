@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
 
 import 'antd/dist/antd.css';
+
+import * as actions from '../actions';
 
 import Header from '../containers/Header';
 import Status from './Status';
@@ -17,21 +18,21 @@ import Checkbox from './Checkbox';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { initiated: false, deployed: true }
+    this.state = { initiated: false, deployed: true };
   }
 
   componentDidMount() {
     this.props.initWeb3();
 
-		setInterval(() => {
-			this.props.fetchAccount(this.props.web3);
-		}, 1000);
+    setInterval(() => {
+      this.props.fetchAccount(this.props.web3);
+    }, 1000);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.web3 !== nextProps.web3) {
       this.props.fetchAccount(this.props.web3);
-      this.setState({initiated: true});
+      this.setState({ initiated: true });
 
       if (nextProps.web3.web3Initiated) {
         this.props.initLNKSTokenContract(nextProps.web3);
@@ -39,17 +40,17 @@ class App extends Component {
       }
     }
 
-    if (this.props.account !== nextProps.account && typeof nextProps.account === "string" ) {
-			this.setState({initiated: true, account: nextProps.account});
-		}
+    if (this.props.account !== nextProps.account && typeof nextProps.account === 'string') {
+      this.setState({ initiated: true });
+    }
 
     if (this.props.LNKSToken !== nextProps.LNKSToken) {
       nextProps.LNKSToken.deployed()
-        .then(exchange => {
-          this.setState({deployed: true})
+        .then(() => {
+          this.setState({ deployed: true });
         })
-        .catch(err => {
-          this.setState({deployed: false})
+        .catch(() => {
+          this.setState({ deployed: false });
         });
     }
   }
@@ -59,27 +60,33 @@ class App extends Component {
       <div className="app container">
         <BrowserRouter>
           <div>
-            <Status account={this.props.account} metamask={this.props.web3} initiated={this.state.initiated} deployed={this.state.deployed} {...this.props} />
+            <Status
+              account={this.props.account}
+              metamask={this.props.web3}
+              initiated={this.state.initiated}
+              deployed={this.state.deployed}
+              {...this.props}
+            />
             <Header />
 
             <Route exact path="/" component={Checkbox} />
 
-            {typeof this.props.LNKSToken  === "function" &&
-             typeof this.props.LNKSExchange  === "function" &&
+            {typeof this.props.LNKSToken === 'function' &&
+             typeof this.props.LNKSExchange === 'function' &&
              this.state.deployed &&
-             typeof this.props.account === "string" &&
+             typeof this.props.account === 'string' &&
               this.props.account !== 'empty' ?
-              <div>
-                <Route exact path="/app" component={Home} />
-                <Route exact path="/buy-redeem" component={BuyRedeem} />
-                <Route exact path="/admin" component={Admin} />
-              </div> : null}
+                <div>
+                  <Route exact path="/app" component={Home} />
+                  <Route exact path="/buy-redeem" component={BuyRedeem} />
+                  <Route exact path="/admin" component={Admin} />
+                </div> : null}
           </div>
         </BrowserRouter>
       </div>
     );
   }
-};
+}
 
 
 function mapStateToProps(state) {
@@ -87,8 +94,8 @@ function mapStateToProps(state) {
     web3: state.web3,
     LNKSExchange: state.LNKSExchange,
     LNKSToken: state.LNKSToken,
-    account: state.account
-  }
+    account: state.account,
+  };
 }
 
 export default connect(mapStateToProps, actions)(App);

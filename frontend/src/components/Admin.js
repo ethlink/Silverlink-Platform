@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import OrdersAdmin from './OrdersAdmin';
 import RedeemsAdmin from './RedeemsAdmin';
+import TokensAvailabilityAdmin from './TokensAvailabilityAdmin';
 import CertificatesAdmin from './CertificatesAdmin';
 
 
@@ -13,10 +14,10 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    this.props.LNKSExchange.deployed().then(exchange => {
+    this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.validate(this.props.account)
-        .then(res => {
-            this.setState({isOwner: res});
+        .then((res) => {
+          this.setState({ isOwner: res });
         });
     });
   }
@@ -24,27 +25,32 @@ class Admin extends Component {
   render() {
     return (
       <div>
-          <div className="row">
-            {this.state.isOwner ?
-              <div>
-                <div className="col-xs-12">
-                  <h3 style={{marginTop: 30}}>Orders</h3>
-                  <OrdersAdmin />
-                </div>
+        <div className="row">
+          {this.state.isOwner ?
+            <div>
+              <div className="col-xs-12">
+                <h3 style={{ marginTop: 30 }}>Orders</h3>
+                <OrdersAdmin />
+              </div>
 
-                <div className="col-xs-12">
-                  <h3 style={{marginTop: 30}}>Redeems</h3>
-                  <RedeemsAdmin />
-                </div>
+              <div className="col-xs-12">
+                <h3 style={{ marginTop: 30 }}>Redeems</h3>
+                <RedeemsAdmin />
+              </div>
 
-                <div className="col-xs-12">
-                  <h3 style={{marginTop: 30}}>Certificates</h3>
-                  <CertificatesAdmin />
-                </div>
-              </div> :
-              <div className="col-xs-12"><h2>This area is admin only</h2></div>
+              <div className="col-xs-12">
+                <h3 style={{ marginTop: 30 }}>Tokens availability</h3>
+                <TokensAvailabilityAdmin />
+              </div>
+
+              <div className="col-xs-12">
+                <h3 style={{ marginTop: 30 }}>Certificates</h3>
+                <CertificatesAdmin />
+              </div>
+            </div> :
+            <div className="col-xs-12"><h2>This area is admin only</h2></div>
             }
-          </div>
+        </div>
       </div>
     );
   }
@@ -55,8 +61,8 @@ function mapStateToProps(state) {
   return {
     web3: state.web3,
     LNKSExchange: state.LNKSExchange,
-    account: state.account
-  }
+    account: state.account,
+  };
 }
 
 export default connect(mapStateToProps)(Admin);

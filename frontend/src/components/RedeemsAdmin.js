@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Table, Divider, Button } from 'antd';
+
 const { Column } = Table;
 
 
@@ -22,83 +23,75 @@ class RedeemsAdmin extends Component {
   }
 
   fetchRedemptions() {
-    this.setState({redemptions: []});
+    this.setState({ redemptions: [] });
 
-    this.props.LNKSExchange.deployed().then(exchange => {
-			exchange.getRedemptionsLength({from: this.props.account})
-				.then(total => {
-          for (let i = 0; i < total.toNumber(); i++) {
-            exchange.getRedemption(i, {from: this.props.account})
-              .then(res => {
-                console.log(res);
-
-                let redemptions = this.state.redemptions;
+    this.props.LNKSExchange.deployed().then((exchange) => {
+      exchange.getRedemptionsLength({ from: this.props.account })
+        .then((total) => {
+          for (let i = 0; i < total.toNumber(); i += 1) {
+            exchange.getRedemption(i, { from: this.props.account })
+              .then((res) => {
+                const { redemptions } = this.state;
                 redemptions.push({
                   key: i,
                   address: res[0],
                   location: res[2],
-                  amount: res[1].toNumber() / 1000 + ' LNKS',
-                  time: moment.unix(res[3].toNumber()).fromNow()
+                  amount: `${res[1].toNumber() / 1000} LNKS`,
+                  time: moment.unix(res[3].toNumber()).fromNow(),
                 });
 
                 this.setState({
-                  redemptions: redemptions
-                })
+                  redemptions,
+                });
               });
           }
-				});
-		});
+        });
+    });
   }
 
   approve(idx) {
-    this.setState({wait: true});
+    this.setState({ wait: true });
 
-    console.log("APPROVE", idx);
-
-    this.props.LNKSExchange.deployed().then(exchange => {
+    this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.approveRedemption(idx, {
         from: this.props.account,
-				gas: 250000
+        gas: 250000,
       })
-      .then(res => {
-        console.log("RES", res);
+        .then(() => {
+          setTimeout(() => {
+            clearInterval(this.interval);
 
-        setTimeout(() => {
-          clearInterval(this.interval);
-
-          console.log("RES", res);
-
-          this.setState({wait: false});
-          this.fetchRedemptions();
-          this.interval = setInterval(() => this.fetchRedemptions(), 30000);
-        }, 5000);
-      })
-      .catch(err => {
-        this.setState({wait: false});
-      });
+            this.setState({ wait: false });
+            this.fetchRedemptions();
+            this.interval = setInterval(() => this.fetchRedemptions(), 30000);
+          }, 5000);
+        })
+        .catch(() => {
+          this.setState({ wait: false });
+        });
     });
   }
 
   decline(idx) {
-    this.setState({wait: true});
+    this.setState({ wait: true });
 
-    this.props.LNKSExchange.deployed().then(exchange => {
+    this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.declineRedemption(idx, {
         from: this.props.account,
-        gas: 250000
+        gas: 250000,
       })
-      .then(res => {
-        clearInterval(this.interval);
+        .then(() => {
+          clearInterval(this.interval);
 
-        setTimeout(() => {
-          this.setState({wait: false});
-          this.fetchRedemptions();
-          this.interval = setInterval(() => this.fetchRedemptions(), 30000);
-        }, 5000);
-      })
-      .catch(err => {
-        this.setState({wait: false});
-      });
+          setTimeout(() => {
+            this.setState({ wait: false });
+            this.fetchRedemptions();
+            this.interval = setInterval(() => this.fetchRedemptions(), 30000);
+          }, 5000);
+        })
+        .catch(() => {
+          this.setState({ wait: false });
+        });
     });
   }
 
@@ -132,9 +125,9 @@ class RedeemsAdmin extends Component {
               key="action"
               render={(text, record) => (
                 <span>
-                  <Button onClick={this.approve.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Approve</Button>
+                  <Button onClick={() => this.approve(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>Approve</Button>
                   <Divider type="horizontal" />
-                  <Button onClick={this.decline.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Decline</Button>
+                  <Button onClick={() => this.decline(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>Decline</Button>
                 </span>
               )}
             />
@@ -151,8 +144,8 @@ function mapStateToProps(state) {
     web3: state.web3,
     LNKSExchange: state.LNKSExchange,
     LNKSToken: state.LNKSToken,
-    account: state.account
-  }
+    account: state.account,
+  };
 }
 
 export default connect(mapStateToProps)(RedeemsAdmin);

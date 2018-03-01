@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Table, Divider, Form, Input, Button } from 'antd';
+
 const { Column } = Table;
 
 
@@ -23,83 +24,83 @@ class OrdersAdmin extends Component {
   }
 
   handleChange(event, idx) {
-    let inputs = this.state.inputs;
+    const { inputs } = this.state;
     inputs[idx] = event.target.value;
 
-    this.setState({inputs});
+    this.setState({ inputs });
   }
 
   fetchOrders() {
-    this.setState({redemptions: []});
+    this.setState({ redemptions: [] });
 
-    this.props.LNKSExchange.deployed().then(exchange => {
-			exchange.getOrdersLength({from: this.props.account})
-				.then(total => {
-          for (let i = 0; i < total.toNumber(); i++) {
-            exchange.getOrder(i, {from: this.props.account})
-              .then(res => {
-                let redemptions = this.state.redemptions;
+    this.props.LNKSExchange.deployed().then((exchange) => {
+      exchange.getOrdersLength({ from: this.props.account })
+        .then((total) => {
+          for (let i = 0; i < total.toNumber(); i += 1) {
+            exchange.getOrder(i, { from: this.props.account })
+              .then((res) => {
+                const { redemptions } = this.state;
                 redemptions.push({
                   key: i,
                   address: res[0],
-                  amount: this.props.web3.web3.fromWei(res[1].toNumber()) + ' ETH',
-                  time: moment.unix(res[2].toNumber()).fromNow()
+                  amount: `${this.props.web3.web3.fromWei(res[1].toNumber())} ETH`,
+                  time: moment.unix(res[2].toNumber()).fromNow(),
                 });
 
-                let inputs = this.state.inputs;
+                const { inputs } = this.state;
                 inputs[i] = 0;
 
                 this.setState({
-                  redemptions: redemptions,
-                  inputs: inputs
-                })
+                  redemptions,
+                  inputs,
+                });
               });
           }
-				});
-		});
+        });
+    });
   }
 
   approve(event, idx) {
     event.preventDefault();
 
-    this.setState({wait: true});
+    this.setState({ wait: true });
 
-    this.props.LNKSExchange.deployed().then(exchange => {
-      exchange.approveOrder(idx, parseInt(this.state.inputs[idx], 10)*1000, {
+    this.props.LNKSExchange.deployed().then((exchange) => {
+      exchange.approveOrder(idx, parseInt(this.state.inputs[idx], 10) * 1000, {
         from: this.props.account,
-				gas: 200000
+        gas: 200000,
       })
-      .then(res => {
-        clearInterval(this.interval);
+        .then(() => {
+          clearInterval(this.interval);
 
-        this.setState({wait: false});
-        this.fetchOrders();
-        this.interval = setInterval(() => this.fetchOrders(), 30000);
-      })
-      .catch(err => {
-        this.setState({wait: false});
-      });
+          this.setState({ wait: false });
+          this.fetchOrders();
+          this.interval = setInterval(() => this.fetchOrders(), 30000);
+        })
+        .catch(() => {
+          this.setState({ wait: false });
+        });
     });
   }
 
   decline(idx) {
-    this.setState({wait: true});
+    this.setState({ wait: true });
 
-    this.props.LNKSExchange.deployed().then(exchange => {
+    this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.declineOrder(idx, {
         from: this.props.account,
-        gas: 200000
+        gas: 200000,
       })
-      .then(res => {
-        clearInterval(this.interval);
+        .then(() => {
+          clearInterval(this.interval);
 
-        this.setState({wait: false});
-        this.fetchOrders();
-        this.interval = setInterval(() => this.fetchOrders(), 30000);
-      })
-      .catch(err => {
-        this.setState({wait: false});
-      });
+          this.setState({ wait: false });
+          this.fetchOrders();
+          this.interval = setInterval(() => this.fetchOrders(), 30000);
+        })
+        .catch(() => {
+          this.setState({ wait: false });
+        });
     });
   }
 
@@ -130,12 +131,12 @@ class OrdersAdmin extends Component {
                 <span>
                   <Form onSubmit={e => this.approve(e, record.key)}>
                     <Input placeholder="1 LNKS" onChange={e => this.handleChange(e, record.key)} />
-                    <Button type="primary" htmlType="submit" style={{marginTop: 15}} disabled={this.state.wait ? "true" : null}>Approve</Button>
+                    <Button type="primary" htmlType="submit" style={{ marginTop: 15 }} disabled={this.state.wait ? 'true' : null}>Approve</Button>
                   </Form>
 
                   <Divider type="horizontal" />
 
-                  <Button onClick={this.decline.bind(null, record.key)} type="primary" disabled={this.state.wait ? "true" : null}>Decline</Button>
+                  <Button onClick={() => { this.decline(record.key); }} type="primary" disabled={this.state.wait ? 'true' : null}>Decline</Button>
                 </span>
               )}
             />
@@ -152,8 +153,8 @@ function mapStateToProps(state) {
     web3: state.web3,
     LNKSExchange: state.LNKSExchange,
     LNKSToken: state.LNKSToken,
-    account: state.account
-  }
+    account: state.account,
+  };
 }
 
 export default connect(mapStateToProps)(OrdersAdmin);

@@ -8,7 +8,7 @@ class BuyDirectTransactions extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { transactions: [] }
+    this.state = { transactions: [] };
     this.buyDirectEventHandler = null;
 
     this.fetchTransactions = this.fetchTransactions.bind(this);
@@ -19,16 +19,15 @@ class BuyDirectTransactions extends Component {
   }
 
   fetchTransactions() {
-    this.props.LNKSExchange.deployed().then(exchange => {
+    this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.RedeemEvent({}, {
-          fromBlock: 0,
-          toBlock: 'latest'
-        })
+        fromBlock: 0,
+        toBlock: 'latest',
+      })
         .watch((error, event) => {
           if (error) {
             console.log(error);
-          } else {
-            if (_.findIndex(this.state.transactions, { 'hash': event.transactionHash }) === -1) {
+          } else if (_.findIndex(this.state.transactions, { 'hash': event.transactionHash }) === -1) {
               let updatedTransactions = this.state.transactions.slice();
               updatedTransactions.push({
                 hash: event.transactionHash,
@@ -40,21 +39,18 @@ class BuyDirectTransactions extends Component {
                 transactions: updatedTransactions
               });
             }
-          }
         });
     });
   }
 
   render() {
-    let transactions = this.state.transactions.map(transaction => {
-      return <tr key={transaction.hash}>
+    const transactions = this.state.transactions.map((transaction) => <tr key={transaction.hash}>
         <td>{transaction.hash}</td>
         <td>{transaction.amount} LNKS</td>
         <td>{transaction.time}</td>
-      </tr>;
-    });
+      </tr>);
 
-    return <div className="col-xs-12" style={{paddingBottom: 30}}>
+    return (<div className="col-xs-12" style={{paddingBottom: 30}}>
       <h2>Redeem Transactions</h2>
 
       <table style={{width: "100%"}}>
@@ -70,7 +66,7 @@ class BuyDirectTransactions extends Component {
           {transactions}
         </tbody>
       </table>
-    </div>;
+    </div>);
   }
 }
 
@@ -78,8 +74,8 @@ class BuyDirectTransactions extends Component {
 function mapStateToProps(state) {
   return {
     LNKSExchange: state.LNKSExchange,
-    web3: state.web3
-  }
+    web3: state.web3,
+  };
 }
 
 export default connect(mapStateToProps)(BuyDirectTransactions);
