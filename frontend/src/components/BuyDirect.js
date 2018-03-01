@@ -12,7 +12,6 @@ class BuyDirect extends Component {
 
     this.state = {
       amountEth: 1,
-
       amountTokens: '...',
       priceGram: '...',
       priceEth: '...',
@@ -24,6 +23,7 @@ class BuyDirect extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.calculateTokens = this.calculateTokens.bind(this);
+    this.getSilverFinalPrice = this.getSilverFinalPrice.bind(this);
   }
 
   componentDidMount() {
@@ -36,15 +36,30 @@ class BuyDirect extends Component {
       .then(axios.spread((eth, silver) => {
         this.setState({
           priceEth: eth.data.USD,
-          priceGram: (parseFloat(silver.data.dataset.data[0][1]) / 28.3495).toFixed(2),
         }, () => {
-          this.calculateTokens();
+          this.getSilverFinalPrice(parseFloat(silver.data.dataset.data[0][1]) / 28.3495);
         });
       }))
       .catch((error) => {
-        // eslint-disable-next-line
-        console.log(error);
+      // eslint-disable-next-line
+      console.log(error);
       });
+  }
+
+  getSilverFinalPrice(silverGramPrice) {
+    this.props.LNKSExchange.deployed().then((exchange) => {
+      exchange.getSilverPriceMarkup()
+        .then((res) => {
+          const silverMarkupPerGram = res.toNumber() / 1000;
+          const finalSilverGramPrice = ((silverMarkupPerGram + 100) * silverGramPrice) / 100;
+
+          this.setState({
+            priceGram: finalSilverGramPrice.toFixed(2),
+          }, () => {
+            this.calculateTokens();
+          });
+        });
+    });
   }
 
   getFee() {
@@ -58,25 +73,27 @@ class BuyDirect extends Component {
     });
   }
 
-  calculateTokens() {
+  calculateTokens(calculateFee) {
     const etherInUsd = this.state.amountEth * this.state.priceEth;
     const amountTokens = (etherInUsd / this.state.priceGram).toFixed(2);
 
     this.setState({ amountTokens });
 
-    this.props.LNKSExchange.deployed().then((exchange) => {
-      exchange.calculateFee.call(amountTokens * 1000)
-        .then((res) => {
-          this.setState({
-            fee: `${res.toNumber() / 1000} LNKS`,
+    if (calculateFee) {
+      this.props.LNKSExchange.deployed().then((exchange) => {
+        exchange.calculateFee.call(amountTokens * 1000)
+          .then((res) => {
+            this.setState({
+              fee: `${res.toNumber() / 1000} LNKS`,
+            });
           });
-        });
-    });
+      });
+    }
   }
 
   handleChange(event) {
     this.setState({ amountEth: event.target.value }, () => {
-      this.calculateTokens();
+      this.calculateTokens(true);
     });
   }
 
@@ -108,7 +125,7 @@ class BuyDirect extends Component {
           <font size="2">
             <font color="white">
             1 ETH =
-            </font><font color="#64b0ed">{this.state.priceEth} USD</font>
+            </font><font color="#64b0ed"> {this.state.priceEth} USD</font>
           </font>
         </h5>
         <h5>

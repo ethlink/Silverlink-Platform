@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import OrdersAdmin from './OrdersAdmin';
 import RedeemsAdmin from './RedeemsAdmin';
 import TokensAvailabilityAdmin from './TokensAvailabilityAdmin';
+import SilverPriceMarkupAdmin from './SilverPriceMarkupAdmin';
 import CertificatesAdmin from './CertificatesAdmin';
 
 
@@ -41,6 +42,11 @@ class Admin extends Component {
               <div className="col-xs-12">
                 <h3 style={{ marginTop: 30 }}>Tokens availability</h3>
                 <TokensAvailabilityAdmin />
+              </div>
+
+              <div className="col-xs-12">
+                <h3 style={{ marginTop: 30 }}>Silver price markup</h3>
+                <SilverPriceMarkupAdmin />
               </div>
 
               <div className="col-xs-12">

@@ -4,7 +4,6 @@ import "./SafeMath.sol";
 import './OwnableMultiple.sol';
 import './LNKSToken.sol';
 
-
 contract LNKSExchange is OwnableMultiple {
   using SafeMath for uint;
 
@@ -28,16 +27,21 @@ contract LNKSExchange is OwnableMultiple {
   }
 
   LNKSToken public token;
-  uint public fee;
   mapping(address => bool) usedAddresses;
+
   Order[] orders;
   Redemption[] redemptions;
   Certificate[] certificates;
-  uint public totalCertificateSupply;
+
+  uint public fee = 0;
+  uint silverReserves = 0;
+  uint availableTokens = 0;
+  uint silverPriceMarkup = 0;
 
   function LNKSExchange(address _tokenAddress) {
     token = LNKSToken(_tokenAddress);
     fee = 3; // 3 = 0.3% in 1-digit precision
+    silverPriceMarkup = 3000; // 3000 = 3% in 3-digit precision
   }
 
   function setTokenAddress(address _tokenAddress) public onlyOwner {
@@ -102,11 +106,14 @@ contract LNKSExchange is OwnableMultiple {
     fee = _fee;
   }
 
-  function calculateFee(uint _amount) public returns (uint) {
+  function calculateFee(uint _amount) public constant returns (uint) {
     uint feeAmount = _amount * fee / 1000;
 
-    if (feeAmount == 0) return 1;
-    else return feeAmount;
+    if (feeAmount == 0) {
+      return 1;
+    } else {
+      return feeAmount;
+    }
   }
 
   function getOrdersLength() public constant onlyOwner returns (uint) {
@@ -176,7 +183,7 @@ contract LNKSExchange is OwnableMultiple {
       timestamp: block.timestamp
     });
 
-    totalCertificateSupply = totalCertificateSupply.add(certificate.amount);
+    silverReserves = silverReserves.add(certificate.amount);
 
     certificates.push(certificate);
   }
@@ -197,14 +204,30 @@ contract LNKSExchange is OwnableMultiple {
   function deleteCertificate(uint _index) public onlyOwner {
     require(certificates[_index].amount >= 0);
 
-    totalCertificateSupply = totalCertificateSupply.sub(certificates[_index].amount);
+    silverReserves = silverReserves.sub(certificates[_index].amount);
 
     certificates[_index] = certificates[certificates.length-1];
     certificates.length--;
   }
 
+  function setAvailableTokens(uint _availableTokens) public onlyOwner {
+    availableTokens = _availableTokens;
+  }
+
   function tokensSupplyAvailable() public constant returns (int) {
-    return int(totalCertificateSupply) - int(token.totalSupply());
+    return int(availableTokens) - int(token.totalSupply());
+  }
+
+  function getSilverReserves() public constant returns (uint) {
+    return silverReserves;
+  }
+
+  function setSilverPriceMarkup(uint _silverPriceMarkup) public onlyOwner returns (uint) {
+    silverPriceMarkup = _silverPriceMarkup;
+  }
+
+  function getSilverPriceMarkup() public constant returns (uint) {
+    return silverPriceMarkup;
   }
 
   function withdraw(address _to, uint _amount) public onlyOwner {
@@ -216,13 +239,3 @@ contract LNKSExchange is OwnableMultiple {
    */
   function() public payable {}
 }
-
-
-/*
-1. LNKSToken.deployed().then(function(instance) {token=instance;})
-2. LNKSExchange.deployed().then(function(instance) {exchange=instance;})
-3. token.mint(web3.eth.accounts[0],100)
-4. exchange.setTokenAddress(token.address)
-5. exchange.redeem(5)
-6. exchange.approveRedemption(0)
- */
