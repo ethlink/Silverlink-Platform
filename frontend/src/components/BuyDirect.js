@@ -67,7 +67,7 @@ class BuyDirect extends Component {
       exchange.fee()
         .then((res) => {
           this.setState({
-            fee: `${res.toNumber() / 10}% or at least 0.001 LNKS`,
+            fee: `${res.toNumber() / 1000}% or at least 0.001 LNKS`,
           });
         });
     });
