@@ -131,7 +131,7 @@ class BuyDirect extends Component {
         <h5>
           <font size="2">
             <font color="white">
-            Silver Gram Price =
+            Silver (Silver Link) Gram Price =
             </font><font color="#64b0ed"> {this.state.priceGram} USD</font>
           </font>
         </h5>
