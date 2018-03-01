@@ -10,7 +10,6 @@ class Redeem extends Component {
     super(props);
 
     this.state = {
-      amount: '',
       success: '',
       failure: '',
     };
@@ -35,7 +34,7 @@ class Redeem extends Component {
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.redeem(
         this.state.amount * 1000,
-        `${this.state.street} | ${this.state.city} | ${this.state.state} | ${this.state.zip} | ${this.state.country}`, {
+        `${this.state.name} | ${this.state.street} | ${this.state.city} | ${this.state.state} | ${this.state.zip} | ${this.state.country}`, {
           from: this.props.account,
           gas: 300000,
         },
@@ -45,7 +44,9 @@ class Redeem extends Component {
 
         this.setState({ success: `Success! Transaction hash - ${receipt.tx}` });
       }).catch((error) => {
-        this.setState({ failure: error.message });
+        console.log(error);
+
+        this.setState({ failure: 'Oops, something went wrong. Try again later.' });
       });
     });
   }
@@ -66,6 +67,14 @@ class Redeem extends Component {
               value={this.state.amount}
               name="amount"
               placeholder="Amount to redeem"
+            />
+            <Input
+              type="text"
+              onChange={this.handleChange}
+              value={this.state.name}
+              name="name"
+              placeholder="Name"
+              style={{ marginTop: 10 }}
             />
             <Input
               type="text"
