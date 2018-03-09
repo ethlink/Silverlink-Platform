@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Input, Button } from 'antd';
+import { message, Form, Input, Button } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -12,6 +12,7 @@ class Redeem extends Component {
     this.state = {
       success: '',
       failure: '',
+      loading: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -31,6 +32,14 @@ class Redeem extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    this.setState({
+      success: '',
+      failure: '',
+      loading: true,
+    });
+
+    this.hide = message.loading('Action in progress..', 0);
+
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.redeem(
         this.state.amount * 1000,
@@ -42,11 +51,14 @@ class Redeem extends Component {
         // eslint-disable-next-line
         console.log('receipt', receipt);
 
-        this.setState({ success: `Success! Transaction hash - ${receipt.tx}` });
+        this.hide();
+        this.setState({ success: `Success! Transaction hash - ${receipt.tx}`, loading: false });
       }).catch((error) => {
+        // eslint-disable-next-line
         console.log(error);
 
-        this.setState({ failure: 'Oops, something went wrong. Try again later.' });
+        this.hide();
+        this.setState({ failure: 'Oops, something went wrong. Try again later.', loading: false });
       });
     });
   }
@@ -118,7 +130,13 @@ class Redeem extends Component {
             />
           </FormItem>
 
-          <Button type="primary" htmlType="submit">Redeem tokens</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={this.state.loading}
+          >
+            Redeem tokens
+          </Button>
         </Form>
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Input, Button } from 'antd';
+import { message, Form, Input, Button } from 'antd';
 import axios from 'axios';
 
 const FormItem = Form.Item;
@@ -18,6 +18,7 @@ class BuyDirect extends Component {
       fee: '...',
       success: '',
       failure: '',
+      loading: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -100,15 +101,31 @@ class BuyDirect extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    this.setState({
+      success: '',
+      failure: '',
+      loading: true,
+    });
+
+    this.hide = message.loading('Action in progress..', 0);
+
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.buyDirect({
         from: this.props.account,
         value: this.props.web3.web3.toWei(this.state.amountEth, 'ether'),
         gas: 200000,
       }).then((receipt) => {
-        this.setState({ success: `Success! Transaction hash - ${receipt.tx}` });
+        // eslint-disable-next-line
+        console.log('receipt', receipt);
+
+        this.hide();
+        this.setState({ success: `Success! Transaction hash - ${receipt.tx}`, loading: false });
       }).catch((error) => {
-        this.setState({ failure: error.message });
+        // eslint-disable-next-line
+        console.log(error);
+
+        this.hide();
+        this.setState({ failure: 'Oops, something went wrong. Try again later.', loading: false });
       });
     });
   }
@@ -154,7 +171,13 @@ class BuyDirect extends Component {
             />
           </FormItem>
 
-          <Button type="primary" htmlType="submit">Buy tokens</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={this.state.loading}
+          >
+            Buy tokens
+          </Button>
           <h6>* Fee: {this.state.fee} (for first time buyers)</h6>
         </Form>
       </div>
