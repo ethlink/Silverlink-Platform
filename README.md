@@ -24,7 +24,7 @@
 
 ## Buy direct
 
-1. exchange.buyDirect({from: web3.eth.accounts[1], value: web3.toWei(7.77, 'ether')})
+1. exchange.buyDirect({from: acc, value: web3.toWei(0.11, 'ether')})
 2. exchange.getOrdersLength.call()
 3. exchange.getOrder.call(0)
 4. Assume 1 ETH = 100 TOKENS (7.77 ETH = 777 TOKENS)
