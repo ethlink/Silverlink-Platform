@@ -64,8 +64,8 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0xc3eb7ab68e4126db252718c65efdbd87b7e11751",
-      "updated_at": 1516961984757
+      "address": "0xd2bc4b85e204dab0c09193409b6eddfa3c59261e",
+      "updated_at": 1519920277031
     },
     "1516963626471": {
       "events": {},
@@ -96,8 +96,14 @@
       "links": {},
       "address": "0x4df26ef7e311856e0f08b50584537dfec84d1b09",
       "updated_at": 1519918097185
+    },
+    "1520611348113": {
+      "events": {},
+      "links": {},
+      "address": "0x896f0d69c6d1e718c731e8fa104dc423f91ccd8e",
+      "updated_at": 1520611364107
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1519918097185
+  "updated_at": 1520611364107
 }

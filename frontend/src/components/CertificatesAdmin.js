@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Form, Input, Button } from 'antd';
+import { message, Table, Form, Input, Button } from 'antd';
+import _ from 'lodash';
 
 const { Column } = Table;
 
@@ -12,6 +13,7 @@ class CertificatesAdmin extends Component {
       certificates: [],
       url: '',
       amount: null,
+      loading: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,11 +24,14 @@ class CertificatesAdmin extends Component {
 
   componentDidMount() {
     this.fetchCertificates();
-    this.interval = setInterval(() => this.fetchCertificates(), 30000);
+    this.interval = setInterval(() => this.fetchCertificates(), 10000);
   }
 
   handleSubmit(event) {
     event.preventDefault();
+
+    this.setState({ loading: true });
+    this.hide = message.loading('Action in progress, do not close or reset this window..', 0);
 
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.addCertificate(
@@ -44,10 +49,16 @@ class CertificatesAdmin extends Component {
         this.setState({
           url: '',
           amount: null,
+          loading: false,
         });
+
+        this.hide();
       }).catch((error) => {
         // eslint-disable-next-line
         alert(error.message);
+
+        this.setState({ loading: false });
+        this.hide();
       });
     });
   }
@@ -62,8 +73,25 @@ class CertificatesAdmin extends Component {
     });
   }
 
-  fetchCertificates() {
-    this.setState({ certificates: [] });
+  fetchCertificates(cb) {
+    let certificates = [];
+    const that = this;
+
+    function addCertificate(res, i, total) {
+      certificates.push({
+        key: i,
+        url: res[0],
+        amount: res[1].toNumber() / 1000,
+      });
+
+      certificates = _.orderBy(certificates, ['key'], ['desc']);
+
+      if (certificates.length === total) {
+        that.setState({ certificates });
+
+        if (cb) cb();
+      }
+    }
 
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.getCertificatesLength({ from: this.props.account })
@@ -71,17 +99,7 @@ class CertificatesAdmin extends Component {
           for (let i = 0; i < total.toNumber(); i += 1) {
             exchange.getCertificate(i, { from: this.props.account })
               .then((res) => {
-                const { certificates } = this.state;
-
-                certificates.push({
-                  key: i,
-                  url: res[0],
-                  amount: res[1].toNumber(),
-                });
-
-                this.setState({
-                  certificates,
-                });
+                addCertificate(res, i, total.toNumber());
               });
           }
         });
@@ -89,6 +107,9 @@ class CertificatesAdmin extends Component {
   }
 
   deleteCertificate(key) {
+    this.setState({ loading: true });
+    this.hide = message.loading('Action in progress, do not close or reset this window..', 0);
+
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.deleteCertificate(
         key,
@@ -97,12 +118,16 @@ class CertificatesAdmin extends Component {
           gas: 300000,
         },
       ).then(() => {
-        setTimeout(() => {
-          this.fetchCertificates();
-        }, 1000);
+        this.fetchCertificates(() => {
+          setTimeout(() => {
+            this.setState({ loading: false });
+            this.hide();
+          }, 10000);
+        });
       }).catch((error) => {
         // eslint-disable-next-line
         alert(error.message);
+        this.hide();
       });
     });
   }
@@ -132,6 +157,7 @@ class CertificatesAdmin extends Component {
               type="primary"
               htmlType="submit"
               style={{ marginTop: 10, marginBottom: 30 }}
+              loading={this.state.loading}
             >Add certificate
             </Button>
           </Form>
@@ -152,7 +178,11 @@ class CertificatesAdmin extends Component {
               key="action"
               render={(text, record) => (
                 <span>
-                  <Button onClick={() => this.deleteCertificate(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>
+                  <Button
+                    onClick={() => this.deleteCertificate(record.key)}
+                    type="primary"
+                    loading={this.state.loading}
+                  >
                     Delete
                   </Button>
                 </span>

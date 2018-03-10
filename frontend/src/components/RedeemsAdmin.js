@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Table, Divider, Button } from 'antd';
+import { message, Table, Divider, Button } from 'antd';
+import _ from 'lodash';
 
 const { Column } = Table;
 
@@ -10,7 +11,7 @@ class RedeemsAdmin extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { redemptions: [], wait: false };
+    this.state = { redemptions: [], loading: false };
 
     this.approve = this.approve.bind(this);
     this.decline = this.decline.bind(this);
@@ -19,30 +20,42 @@ class RedeemsAdmin extends Component {
 
   componentDidMount() {
     this.fetchRedemptions();
-    this.interval = setInterval(() => this.fetchRedemptions(), 30000);
+    this.interval = setInterval(() => this.fetchRedemptions(), 10000);
   }
 
-  fetchRedemptions() {
-    this.setState({ redemptions: [] });
+  fetchRedemptions(cb) {
+    let redemptions = [];
+    const that = this;
+
+    function addRedemption(res, i, total) {
+      redemptions.push({
+        key: i,
+        address: res[0],
+        location: res[2],
+        amount: `${res[1].toNumber() / 1000} LNKS`,
+        time: moment.unix(res[3].toNumber()).fromNow(),
+      });
+
+      redemptions = _.orderBy(redemptions, ['key'], ['desc']);
+
+      if (redemptions.length === total) {
+        that.setState({ redemptions });
+
+        if (cb) cb();
+      }
+    }
 
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.getRedemptionsLength({ from: this.props.account })
         .then((total) => {
+          if (total.toNumber() === 0) {
+            this.setState({ redemptions });
+          }
+
           for (let i = 0; i < total.toNumber(); i += 1) {
             exchange.getRedemption(i, { from: this.props.account })
               .then((res) => {
-                const { redemptions } = this.state;
-                redemptions.push({
-                  key: i,
-                  address: res[0],
-                  location: res[2],
-                  amount: `${res[1].toNumber() / 1000} LNKS`,
-                  time: moment.unix(res[3].toNumber()).fromNow(),
-                });
-
-                this.setState({
-                  redemptions,
-                });
+                addRedemption(res, i, total.toNumber());
               });
           }
         });
@@ -50,7 +63,9 @@ class RedeemsAdmin extends Component {
   }
 
   approve(idx) {
-    this.setState({ wait: true });
+    this.setState({ loading: true });
+
+    this.hide = message.loading('Action in progress, do not close or reset this window..', 0);
 
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.approveRedemption(idx, {
@@ -58,22 +73,23 @@ class RedeemsAdmin extends Component {
         gas: 250000,
       })
         .then(() => {
-          setTimeout(() => {
-            clearInterval(this.interval);
-
-            this.setState({ wait: false });
-            this.fetchRedemptions();
-            this.interval = setInterval(() => this.fetchRedemptions(), 30000);
-          }, 5000);
+          this.fetchRedemptions(() => {
+            setTimeout(() => {
+              this.setState({ loading: false });
+              this.hide();
+            }, 10000);
+          });
         })
         .catch(() => {
-          this.setState({ wait: false });
+          this.setState({ loading: false });
         });
     });
   }
 
   decline(idx) {
-    this.setState({ wait: true });
+    this.setState({ loading: true });
+
+    this.hide = message.loading('Action in progress, do not close or reset this window..', 0);
 
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.declineRedemption(idx, {
@@ -81,16 +97,15 @@ class RedeemsAdmin extends Component {
         gas: 250000,
       })
         .then(() => {
-          clearInterval(this.interval);
-
-          setTimeout(() => {
-            this.setState({ wait: false });
-            this.fetchRedemptions();
-            this.interval = setInterval(() => this.fetchRedemptions(), 30000);
-          }, 5000);
+          this.fetchRedemptions(() => {
+            setTimeout(() => {
+              this.setState({ loading: false });
+              this.hide();
+            }, 10000);
+          });
         })
         .catch(() => {
-          this.setState({ wait: false });
+          this.setState({ loading: false });
         });
     });
   }
@@ -125,9 +140,23 @@ class RedeemsAdmin extends Component {
               key="action"
               render={(text, record) => (
                 <span>
-                  <Button onClick={() => this.approve(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>Approve</Button>
+                  <Button
+                    onClick={() => this.approve(record.key)}
+                    type="primary"
+                    loading={this.state.loading}
+                  >
+                    Approve
+                  </Button>
+
                   <Divider type="horizontal" />
-                  <Button onClick={() => this.decline(record.key)} type="primary" disabled={this.state.wait ? 'true' : null}>Decline</Button>
+
+                  <Button
+                    onClick={() => this.decline(record.key)}
+                    type="primary"
+                    loading={this.state.loading}
+                  >
+                    Decline
+                  </Button>
                 </span>
               )}
             />

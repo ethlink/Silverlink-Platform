@@ -6,8 +6,8 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0x51bd194e257e2aebd6d32158c63b99bd531df473",
-      "updated_at": 1516961984757
+      "address": "0x2287e28500921b908a32561c6ba2ef6c19f4afe7",
+      "updated_at": 1519920277028
     },
     "1516963626471": {
       "events": {},
@@ -38,8 +38,14 @@
       "links": {},
       "address": "0x9f0c8e4b42f0142f5a37fbff1fbd27897b151956",
       "updated_at": 1519918097179
+    },
+    "1520611348113": {
+      "events": {},
+      "links": {},
+      "address": "0xfb0a4e5bbc481ae30826742c325ac26442cf0253",
+      "updated_at": 1520611364103
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1519918097179
+  "updated_at": 1520611364103
 }

@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import _ from 'lodash';
 
 const SHOW_CERTIFICATES_AT_A_TIME = 6;
 
-class Certificates extends Component {
+class Certificates extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { certificates: [], showMoreButton: false };
@@ -19,7 +20,7 @@ class Certificates extends Component {
   }
 
   fetchCertificates() {
-    const certificates = [];
+    let certificates = [];
     const that = this;
 
     function addCertificate(res, i) {
@@ -29,6 +30,8 @@ class Certificates extends Component {
         amount: res[1].toNumber() / 1000,
         timestamp: res[2].toNumber(),
       });
+
+      certificates = _.orderBy(certificates, ['key'], ['desc']);
 
       if (i === 0 || certificates.length === that.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME) {
         that.setState({ certificates });
