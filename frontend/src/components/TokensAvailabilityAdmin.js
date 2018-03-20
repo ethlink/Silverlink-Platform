@@ -39,7 +39,7 @@ class CertificatesAdmin extends Component {
         console.log('Success: ', receipt);
       }).catch((error) => {
         // eslint-disable-next-line
-        alert(error.message);
+        console.log(error.message);
       });
     });
   }

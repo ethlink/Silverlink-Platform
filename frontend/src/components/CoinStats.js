@@ -34,11 +34,12 @@ class CoinStats extends Component {
         this.setState({ grams: silverReserves.toNumber() / 1000 });
       });
 
-      exchange.getCertificatesLength().then((length) => {
-        this.setState({
-          certificates: length.toNumber(),
+      exchange.getCertificatesLength({ from: this.props.account })
+        .then((length) => {
+          this.setState({
+            certificates: length.toNumber(),
+          });
         });
-      });
 
       exchange.tokensSupplyAvailable().then((tokensAvailable) => {
         this.setState({ tokensAvailable: tokensAvailable.toNumber() / 1000 });

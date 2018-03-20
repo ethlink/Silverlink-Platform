@@ -55,7 +55,7 @@ class CertificatesAdmin extends Component {
         this.hide();
       }).catch((error) => {
         // eslint-disable-next-line
-        alert(error.message);
+        console.log(error.message);
 
         this.setState({ loading: false });
         this.hide();
@@ -126,7 +126,7 @@ class CertificatesAdmin extends Component {
         });
       }).catch((error) => {
         // eslint-disable-next-line
-        alert(error.message);
+        console.log(error.message);
         this.hide();
       });
     });

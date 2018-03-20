@@ -22,6 +22,8 @@ class Certificates extends PureComponent {
   fetchCertificates() {
     let certificates = [];
     const that = this;
+    let added = 0;
+    let toAdd = 0;
 
     function addCertificate(res, i) {
       certificates.push({
@@ -32,8 +34,10 @@ class Certificates extends PureComponent {
       });
 
       certificates = _.orderBy(certificates, ['key'], ['desc']);
+      added += 1;
 
-      if (i === 0 || certificates.length === that.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME) {
+      // if (i === 0 || certificates.length === that.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME) {
+      if (added === toAdd) {
         that.setState({ certificates });
       }
 
@@ -49,6 +53,16 @@ class Certificates extends PureComponent {
 
           if (total > SHOW_CERTIFICATES_AT_A_TIME) {
             this.setState({ showMoreButton: true });
+          }
+
+          if (total < SHOW_CERTIFICATES_AT_A_TIME) {
+            toAdd = total;
+          } else {
+            toAdd = this.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME;
+
+            if (toAdd > total) {
+              toAdd = total;
+            }
           }
 
           for (let i = total - 1;
@@ -70,7 +84,7 @@ class Certificates extends PureComponent {
 
   render() {
     const certificates = this.state.certificates.map(certificate => (
-      <tr key={certificate.timestamp}>
+      <tr key={certificate.url + certificate.timestamp}>
         <td><font color="white"><a href={certificate.url} style={{ color: 'white' }} target="_blank">{certificate.url}</a></font></td>
         <td><font color="white">{certificate.amount} grams</font></td>
         <td><font color="white">{moment.unix(certificate.timestamp).fromNow()}</font></td>
