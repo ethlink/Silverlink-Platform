@@ -36,7 +36,6 @@ class Certificates extends PureComponent {
       certificates = _.orderBy(certificates, ['key'], ['desc']);
       added += 1;
 
-      // if (i === 0 || certificates.length === that.showMoreClicks * SHOW_CERTIFICATES_AT_A_TIME) {
       if (added === toAdd) {
         that.setState({ certificates });
       }

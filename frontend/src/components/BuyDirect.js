@@ -167,6 +167,8 @@ class BuyDirect extends Component {
               type="number"
               onChange={this.handleChange}
               value={this.state.amountEth}
+              step="0.00000001"
+              lang="en-150"
               placeholder="Amount to buy"
             />
           </FormItem>
