@@ -38,8 +38,7 @@ contract LNKSExchange is OwnableMultiple {
   uint availableTokens = 0;
   uint silverPriceMarkup = 0;
 
-  function LNKSExchange(address _tokenAddress) {
-    token = LNKSToken(_tokenAddress);
+  function LNKSExchange() {
     fee = 300; // 300 = 0.3% in 1-digit precision
     silverPriceMarkup = 3000; // 3000 = 3% in 3-digit precision
   }
