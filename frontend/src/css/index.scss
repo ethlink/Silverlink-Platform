@@ -1,7 +1,9 @@
 @import "header.scss";
 
-html, body { background-color: #33425c !important; }
+html, body { background-color: #1c2e4d !important; }
 
+input { max-width: 200px; }
+input { color: #000 !important; }
 
 #root { color: #f9f9f9; font-family: 'Montserrat';
 	h1, h2, h3, h4, h5, h6, p { color: #f9f9f9; font-weight: 300; }
@@ -35,4 +37,10 @@ html, body { background-color: #33425c !important; }
 
 #buydirect, #redeem {
 	input { max-width: 300px; }
+}
+
+#login, #register { padding: 30px 0;
+	.logo { width: 150px; }
+	a { color: #fff; font-weight: 300; }
+	h5 { margin: 0 0 20px 0; }
 }

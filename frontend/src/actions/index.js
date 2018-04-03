@@ -9,8 +9,6 @@ export function initWeb3() {
 
   if (typeof web3 !== 'undefined' && typeof Web3 !== 'undefined') {
     const provider = web3.currentProvider;
-    // let provider2 = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
-
     const web3Initiated = new Web3(provider);
 
     return {

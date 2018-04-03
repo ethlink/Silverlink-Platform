@@ -13,7 +13,10 @@ import Home from './Home';
 import Admin from './Admin';
 import BuyRedeem from './BuyRedeem';
 import Checkbox from './Checkbox';
-
+import PrivateRoute from './PrivateRoute';
+import Login from './Login';
+import Register from './Register';
+// import AuthButton from './AuthButton';
 
 class App extends Component {
   constructor(props) {
@@ -69,18 +72,22 @@ class App extends Component {
             />
             <Header />
 
+            {/* <AuthButton /> */}
+
             <Route exact path="/" component={Checkbox} />
 
             {typeof this.props.LNKSToken === 'function' &&
-             typeof this.props.LNKSExchange === 'function' &&
-             this.state.deployed &&
-             typeof this.props.account === 'string' &&
-              this.props.account !== 'empty' ?
+              typeof this.props.LNKSExchange === 'function' &&
+              this.state.deployed &&
+              typeof this.props.account === 'string' &&
+              this.props.account !== 'empty' &&
                 <div>
-                  <Route exact path="/app" component={Home} />
-                  <Route exact path="/buy-redeem" component={BuyRedeem} />
-                  <Route exact path="/admin" component={Admin} />
-                </div> : null}
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/register" component={Register} />
+                  <PrivateRoute exact path="/app" component={Home} />
+                  <PrivateRoute exact path="/buy-redeem" component={BuyRedeem} />
+                  <PrivateRoute exact path="/admin" component={Admin} />
+                </div>}
           </div>
         </BrowserRouter>
       </div>
