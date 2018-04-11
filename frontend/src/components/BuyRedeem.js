@@ -10,11 +10,11 @@ import RecentTransactions from './RecentTransactions';
 const BuyRedeem = () => (
   <div>
     <div className="row">
-      <div className="col-xs-12 col-sm-5 col-md-push-1 text-center">
+      <div className="col-xs-12 col-sm-5 col-sm-push-1 text-center">
         <Redeem />
       </div>
 
-      <div className="col-xs-12 col-sm-5 col-md-push-1 text-center">
+      <div className="col-xs-12 col-sm-5 col-sm-push-1 text-center">
         <BuyDirect />
       </div>
     </div>

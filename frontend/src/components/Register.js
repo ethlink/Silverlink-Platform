@@ -1,37 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Alert, Row, Col } from 'antd';
 import logo from '../img/logo.jpg';
 import RegisterStep1 from './RegisterStep1';
 import RegisterStep2 from './RegisterStep2';
 import RegisterStep3 from './RegisterStep3';
-
-const fakeAuth = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true;
-    setTimeout(cb, 100); // fake async
-  },
-  signout(cb) {
-    this.isAuthenticated = false;
-    setTimeout(cb, 100); // fake async
-  },
-};
+import * as actions from '../actions';
 
 class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { page: 1 };
+    this.state = { page: 1, loading: false };
 
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  nextPage(values) {
-    console.log('NEXT PAGE', values);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.alert) {
+      this.setState({ loading: false });
+    }
+  }
 
+  nextPage() {
     this.setState({ page: this.state.page + 1 });
   }
 
@@ -39,24 +33,9 @@ class Login extends Component {
     this.setState({ page: this.state.page - 1 });
   }
 
-  login() {
-    fakeAuth.authenticate(() => {
-
-    });
-  }
-
-  // handleChange(event) {
-  //   const { target } = event;
-  //   const value = target.type === 'checkbox' ? target.checked : target.value;
-  //   const { name } = target;
-
-  //   this.setState({
-  //     [name]: value,
-  //   });
-  // }
-
   handleSubmit(values) {
-    console.log('SUBMIT', values);
+    this.setState({ loading: true });
+    this.props.signupUser(values);
   }
 
   render() {
@@ -65,10 +44,22 @@ class Login extends Component {
     return (
       <div id="register" className="text-center">
         <img className="logo" src={logo} alt="Ethereum Link" />
+
+        {this.props.alert.message &&
+          <Row>
+            <Col span={24} sm={{ span: 14, offset: 5 }}>
+              <Alert
+                style={{ marginTop: 30 }}
+                {...this.props.alert}
+              />
+            </Col>
+          </Row>
+        }
+
         <h2>Sign up</h2>
 
-        {page === 1 && <RegisterStep3
-          onSubmit={this.handleSubmit}
+        {page === 1 && <RegisterStep1
+          onSubmit={this.nextPage}
         />}
 
         {page === 2 && <RegisterStep2
@@ -76,15 +67,20 @@ class Login extends Component {
           onSubmit={this.nextPage}
         />}
 
-        {page === 3 && <RegisterStep1
+        {page === 3 && <RegisterStep3
           previousPage={this.previousPage}
+          loading={this.state.loading}
           onSubmit={this.handleSubmit}
         />}
 
-        <Link href="/login" to="login">Sign in</Link>
+        <Link href="/login" to="/login">Sign in</Link>
       </div>
     );
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  alert: state.alert,
+});
+
+export default connect(mapStateToProps, actions)(Login);

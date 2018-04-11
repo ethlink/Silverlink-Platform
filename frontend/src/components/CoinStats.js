@@ -20,6 +20,10 @@ class CoinStats extends Component {
     this.getCoinStats();
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
+
   getCoinStats(LNKSToken) {
     this.props.LNKSToken.deployed().then((token) => {
       token.totalSupply().then((supply) => {
@@ -46,7 +50,7 @@ class CoinStats extends Component {
       });
     });
 
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       this.getCoinStats(LNKSToken);
     }, 2000);
   }

@@ -1,6 +1,7 @@
 const Web3 = require('web3');
 const contract = require('truffle-contract');
 const fs = require('fs');
+const keys = require('keys');
 
 class App {
   constructor(artifact) {
@@ -31,7 +32,7 @@ class App {
 
     this.app = await contractInstance.deployed();
 
-    await this.web3.eth.personal.unlockAccount(this.account, 'lnkstoken1!', 600);
+    await this.web3.eth.personal.unlockAccount(this.account, keys.accountPass, 600);
 
     cb();
   }

@@ -42,8 +42,7 @@ class BuyDirect extends Component {
         });
       }))
       .catch((error) => {
-      // eslint-disable-next-line
-      console.log(error);
+        console.log(error);
       });
   }
 
@@ -115,15 +114,9 @@ class BuyDirect extends Component {
         value: this.props.web3.web3.toWei(this.state.amountEth, 'ether'),
         gas: 200000,
       }).then((receipt) => {
-        // eslint-disable-next-line
-        console.log('receipt', receipt);
-
         this.hide();
         this.setState({ success: `Success! Transaction hash - ${receipt.tx}`, loading: false });
-      }).catch((error) => {
-        // eslint-disable-next-line
-        console.log(error);
-
+      }).catch(() => {
         this.hide();
         this.setState({ failure: 'Oops, something went wrong. Try again later.', loading: false });
       });

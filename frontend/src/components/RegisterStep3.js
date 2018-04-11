@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { Button, Form } from 'antd';
+import { Button, Form, Row, Col } from 'antd';
 import validate from '../helpers/validate';
 import InputUpload from './InputUpload';
 
@@ -10,28 +10,42 @@ const RegisterStep3 = props => (
   <Form onSubmit={props.handleSubmit}>
     <h5>Step 3 out of 3</h5>
 
-    <Field
-      name="identity-document"
-      type="file"
-      component={InputUpload}
-      label="Identity Document"
-    />
+    <Row>
+      <Col span={24} md={{ span: 12, offset: 6 }}>
+        <Field
+          name="identity"
+          type="file"
+          component={InputUpload}
+          label="Identity Document"
+        />
 
-    <Field
-      name="proof-of-residence"
-      type="file"
-      component={InputUpload}
-      label="Proof of Residence"
-    />
+        <Field
+          name="residence"
+          type="file"
+          component={InputUpload}
+          label="Proof of Residence"
+        />
 
-    <FormItem>
-      <Button
-        type="primary"
-        htmlType="submit"
-      >
-        Sign up
-      </Button>
-    </FormItem>
+        <FormItem>
+          <Button
+            type="secondary"
+            htmlType="button"
+            onClick={props.previousPage}
+            style={{ marginRight: 15 }}
+          >
+            Back
+          </Button>
+
+          <Button
+            type="primary"
+            loading={props.loading}
+            htmlType="submit"
+          >
+            Sign up
+          </Button>
+        </FormItem>
+      </Col>
+    </Row>
   </Form>
 );
 

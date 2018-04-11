@@ -31,7 +31,8 @@ const RegisterStep1 = props => (
 );
 
 export default reduxForm({
-  form: 'sign-up',
+  form: 'signUp',
   destroyOnUnmount: false,
+  initialValues: { country: 'Select country' },
   validate,
 })(RegisterStep1);

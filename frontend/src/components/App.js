@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import 'antd/dist/antd.css';
 
 import * as actions from '../actions';
@@ -16,7 +15,7 @@ import Checkbox from './Checkbox';
 import PrivateRoute from './PrivateRoute';
 import Login from './Login';
 import Register from './Register';
-// import AuthButton from './AuthButton';
+import PasswordRecovery from './PasswordRecovery';
 
 class App extends Component {
   constructor(props) {
@@ -26,6 +25,11 @@ class App extends Component {
 
   componentDidMount() {
     this.props.initWeb3();
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.props.verifyUserToken(token);
+    }
 
     setInterval(() => {
       this.props.fetchAccount(this.props.web3);
@@ -72,8 +76,6 @@ class App extends Component {
             />
             <Header />
 
-            {/* <AuthButton /> */}
-
             <Route exact path="/" component={Checkbox} />
 
             {typeof this.props.LNKSToken === 'function' &&
@@ -82,11 +84,31 @@ class App extends Component {
               typeof this.props.account === 'string' &&
               this.props.account !== 'empty' &&
                 <div>
-                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/login/:userState?" component={Login} />
                   <Route exact path="/register" component={Register} />
-                  <PrivateRoute exact path="/app" component={Home} />
-                  <PrivateRoute exact path="/buy-redeem" component={BuyRedeem} />
-                  <PrivateRoute exact path="/admin" component={Admin} />
+                  <Route
+                    exact
+                    path="/password-recovery/:recoveryString?"
+                    component={PasswordRecovery}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/app"
+                    auth={this.props.auth}
+                    component={Home}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/buy-redeem"
+                    auth={this.props.auth}
+                    component={BuyRedeem}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin"
+                    auth={this.props.auth}
+                    component={Admin}
+                  />
                 </div>}
           </div>
         </BrowserRouter>
@@ -95,13 +117,13 @@ class App extends Component {
   }
 }
 
-
 function mapStateToProps(state) {
   return {
     web3: state.web3,
     LNKSExchange: state.LNKSExchange,
     LNKSToken: state.LNKSToken,
     account: state.account,
+    auth: state.auth,
   };
 }
 

@@ -17,6 +17,10 @@ class Balance extends Component {
     this.getBalance();
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
+
   getBalance() {
     this.props.LNKSToken.deployed().then((token) => {
       token.balanceOf(this.props.account).then((balance) => {
@@ -24,7 +28,7 @@ class Balance extends Component {
       });
     });
 
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       this.getBalance();
     }, 2000);
   }

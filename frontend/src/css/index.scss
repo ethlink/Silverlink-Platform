@@ -18,10 +18,14 @@ input { color: #000 !important; }
 	.ant-form-item { margin-bottom: 15px; }
 	.ant-table-thead > tr > th, .ant-table-tbody > tr > td { background: #fff; }
 	.ant-btn-primary { background-color: #64b0ed !important; border-color: #64b0ed !important; }
+	.ant-upload-list-item { background: #fff; border-radius: 3px; }
+	.has-error .ant-form-explain { margin-top: 5px; }
 }
 
 #header {
-	h2 { width: 100%; margin: 0; padding: 30px 0 45px; text-align:left; font-weight:300; font-size: 32px; border-bottom: 5px solid #fff; }
+	hr { border-bottom: 5px solid #fff; padding: 0 15px; clear: both; }
+	h2 { float: left; margin: 0; padding: 30px 0 45px; text-align:left; font-weight:300; font-size: 32px; }
+	button { float: right; margin: 30px 0 0 0; }
 }
 
 .datum { font-size: 21px; color: #7babef; }
@@ -39,8 +43,9 @@ input { color: #000 !important; }
 	input { max-width: 300px; }
 }
 
-#login, #register { padding: 30px 0;
+#login, #register, #password-recovery { padding: 30px 0;
 	.logo { width: 150px; }
 	a { color: #fff; font-weight: 300; }
 	h5 { margin: 0 0 20px 0; }
+	label { color: #fff; font-weight: 400; margin-right: 15px; }
 }
