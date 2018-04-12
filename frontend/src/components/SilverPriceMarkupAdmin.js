@@ -8,6 +8,7 @@ class SilverPriceMarkupAdmin extends Component {
     super();
     this.state = {
       percentage: null,
+      loading: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,6 +28,8 @@ class SilverPriceMarkupAdmin extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    this.setState({ loading: true });
+
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.setSilverPriceMarkup(
         this.state.percentage * 1000,
@@ -37,9 +40,11 @@ class SilverPriceMarkupAdmin extends Component {
       ).then((receipt) => {
         // eslint-disable-next-line
         console.log('Success: ', receipt);
+        this.setState({ loading: false });
       }).catch((error) => {
         // eslint-disable-next-line
         console.log(error.message);
+        this.setState({ loading: false });
       });
     });
   }
@@ -61,6 +66,7 @@ class SilverPriceMarkupAdmin extends Component {
               type="primary"
               htmlType="submit"
               style={{ marginTop: 10, marginBottom: 30 }}
+              loading={this.state.loading}
             >Set percentage over spot silver price
             </Button>
           </Form>

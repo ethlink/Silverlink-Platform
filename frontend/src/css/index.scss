@@ -2,7 +2,6 @@
 
 html, body { background-color: #1c2e4d !important; }
 
-input { max-width: 200px; }
 input { color: #000 !important; }
 
 #root { color: #f9f9f9; font-family: 'Montserrat';
@@ -48,4 +47,5 @@ input { color: #000 !important; }
 	a { color: #fff; font-weight: 300; }
 	h5 { margin: 0 0 20px 0; }
 	label { color: #fff; font-weight: 400; margin-right: 15px; }
+	input, form .ant-select { max-width: 250px !important; }
 }

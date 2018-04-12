@@ -6,7 +6,7 @@ import RedeemsAdmin from './RedeemsAdmin';
 import TokensAvailabilityAdmin from './TokensAvailabilityAdmin';
 import SilverPriceMarkupAdmin from './SilverPriceMarkupAdmin';
 import CertificatesAdmin from './CertificatesAdmin';
-
+import KYCAdmin from './KYCAdmin';
 
 class Admin extends Component {
   constructor(props) {
@@ -52,6 +52,11 @@ class Admin extends Component {
               <div className="col-xs-12">
                 <h3 style={{ marginTop: 30 }}>Certificates</h3>
                 <CertificatesAdmin />
+              </div>
+
+              <div className="col-xs-12">
+                <h3 style={{ marginTop: 30 }}>KYC</h3>
+                <KYCAdmin />
               </div>
             </div> :
             <div className="col-xs-12"><h2>This area is admin only</h2></div>

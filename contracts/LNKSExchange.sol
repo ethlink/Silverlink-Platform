@@ -187,11 +187,11 @@ contract LNKSExchange is OwnableMultiple {
     certificates.push(certificate);
   }
 
-  function getCertificatesLength() public constant onlyOwner returns (uint) {
+  function getCertificatesLength() public constant returns (uint) {
     return certificates.length;
   }
 
-  function getCertificate(uint _index) public constant onlyOwner returns (string, uint, uint) {
+  function getCertificate(uint _index) public constant returns (string, uint, uint) {
     Certificate memory certificate = certificates[_index];
     return (
       certificate.url,

@@ -134,7 +134,7 @@ class CertificatesAdmin extends Component {
 
   render() {
     return (
-      <div className="redeems-admin" style={{ marginBottom: 30 }}>
+      <div className="redeems-admin">
         <div>
           <Form onSubmit={this.handleSubmit}>
             <Input

@@ -46,7 +46,7 @@ class Certificates extends PureComponent {
     }
 
     this.props.LNKSExchange.deployed().then((exchange) => {
-      exchange.getCertificatesLength({ from: this.props.account })
+      exchange.getCertificatesLength()
         .then((totalRes) => {
           const total = totalRes.toNumber();
 
