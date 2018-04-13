@@ -3,7 +3,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Button, Form, Row, Col, Alert } from 'antd';
-// import validate from '../helpers/validate';
 import InputUpload from './InputUpload';
 import * as actions from '../actions';
 
@@ -45,45 +44,44 @@ class Account extends Component {
           <h4>Identity document: {this.state.user ? this.state.user.identityApproved.toUpperCase() : 'Loading...'}</h4>
         </div>
 
-        {this.state.user &&
-          <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-            {this.props.alert.message &&
-              <Alert
-                style={{ margin: '15px 0 30px 0' }}
-                {...this.props.alert}
-              />}
+        <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+          {this.props.alert.message &&
+            <Alert
+              style={{ margin: '15px 0 30px 0' }}
+              {...this.props.alert}
+            />}
 
-            <Row>
-              <Col span={24} md={{ span: 12, offset: 6 }}>
-                <Field
-                  name="identity"
-                  type="file"
-                  component={InputUpload}
-                  label="Identity Document"
-                />
+          <Row>
+            <Col span={24} md={{ span: 12, offset: 6 }}>
+              <Field
+                name="identity"
+                type="file"
+                component={InputUpload}
+                label="Identity Document"
+              />
 
-                <Field
-                  name="residence"
-                  type="file"
-                  component={InputUpload}
-                  label="Proof of Residence"
-                />
+              <Field
+                name="residence"
+                type="file"
+                component={InputUpload}
+                label="Proof of Residence"
+              />
 
-                <FormItem>
-                  <Button
-                    type="primary"
-                    loading={this.state.loading}
-                    htmlType="submit"
-                  >
-                    Upload documents
-                  </Button>
-                  <p style={{ marginTop: 15, lineHeight: '1.5em' }}>
-                    * If you upload again your documents they will overwrite the current ones
-                  </p>
-                </FormItem>
-              </Col>
-            </Row>
-          </Form>}
+              <FormItem>
+                <Button
+                  type="primary"
+                  loading={this.state.loading}
+                  htmlType="submit"
+                >
+                  Upload documents
+                </Button>
+                <p style={{ marginTop: 15, lineHeight: '1.5em' }}>
+                  * If you upload again your documents they will overwrite the current ones
+                </p>
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
       </div>
     );
   }

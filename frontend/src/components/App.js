@@ -11,7 +11,7 @@ import Status from './Status';
 import Home from './Home';
 import Admin from './Admin';
 import BuyRedeem from './BuyRedeem';
-import Checkbox from './Checkbox';
+import Intro from './Intro';
 import PrivateRoute from './PrivateRoute';
 import Account from './Account';
 import Login from './Login';
@@ -78,15 +78,17 @@ class App extends Component {
             />
             <Header />
 
-            {typeof this.props.LNKSToken === 'function' &&
-              typeof this.props.LNKSExchange === 'function' &&
-              this.state.deployed &&
-              typeof this.props.account === 'string' &&
-              this.props.account !== 'empty' &&
-                <Switch>
-                  <Route exact path="/" component={Checkbox} />
-                  <Route exact path="/login/:userState?" component={Login} />
-                  <Route exact path="/register" component={Register} />
+            <Switch>
+              <Route exact path="/" component={Intro} />
+              <Route exact path="/login/:userState?" component={Login} />
+              <Route exact path="/register" component={Register} />
+
+              {typeof this.props.LNKSToken === 'function' &&
+                typeof this.props.LNKSExchange === 'function' &&
+                this.state.deployed &&
+                typeof this.props.account === 'string' &&
+                this.props.account !== 'empty' &&
+                <div>
                   <Route
                     exact
                     path="/password-recovery/:recoveryString?"
@@ -117,7 +119,8 @@ class App extends Component {
                     component={Admin}
                   />
                   <Route component={NotFound} />
-                </Switch>}
+                </div>}
+            </Switch>
           </div>
         </BrowserRouter>
       </div>
