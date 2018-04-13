@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 
@@ -17,6 +17,7 @@ import Account from './Account';
 import Login from './Login';
 import Register from './Register';
 import PasswordRecovery from './PasswordRecovery';
+import NotFound from './NotFound';
 
 class App extends Component {
   constructor(props) {
@@ -77,14 +78,13 @@ class App extends Component {
             />
             <Header />
 
-            <Route exact path="/" component={Checkbox} />
-
             {typeof this.props.LNKSToken === 'function' &&
               typeof this.props.LNKSExchange === 'function' &&
               this.state.deployed &&
               typeof this.props.account === 'string' &&
               this.props.account !== 'empty' &&
-                <div>
+                <Switch>
+                  <Route exact path="/" component={Checkbox} />
                   <Route exact path="/login/:userState?" component={Login} />
                   <Route exact path="/register" component={Register} />
                   <Route
@@ -116,7 +116,8 @@ class App extends Component {
                     auth={this.props.auth}
                     component={Admin}
                   />
-                </div>}
+                  <Route component={NotFound} />
+                </Switch>}
           </div>
         </BrowserRouter>
       </div>

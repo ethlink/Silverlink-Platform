@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Alert, Row, Col } from 'antd';
-import logo from '../img/logo.jpg';
+import logo from '../img/logo.png';
 import * as actions from '../actions';
 import PasswordRecoveryForm from './PasswordRecoveryForm';
 import PasswordChange from './PasswordChange';

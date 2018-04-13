@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { Form, Button, Alert, Row, Col, Icon } from 'antd';
-import logo from '../img/logo.jpg';
+import logo from '../img/logo.png';
 import InputText from './InputText';
 import * as actions from '../actions';
 
