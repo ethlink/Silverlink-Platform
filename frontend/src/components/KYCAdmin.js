@@ -49,11 +49,18 @@ class KYCAdmin extends Component {
   componentDidMount() {
     axios.get('/api/users/unverified')
       .then((response) => {
+        console.log(response);
         this.setState({ users: response.data.users });
+      }).catch((error) => {
+        console.log(error, error.response);
       });
   }
 
   renderUsers() {
+    if (!this.state.users) {
+      return null;
+    }
+
     const data = this.state.users.map(user => ({
       key: user.email,
       name: `${user.firstName} ${(user.middleName !== 'undefined' ? user.middleName : '')} ${user.surname}`,

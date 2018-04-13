@@ -17,7 +17,6 @@ import Account from './Account';
 import Login from './Login';
 import Register from './Register';
 import PasswordRecovery from './PasswordRecovery';
-import NotFound from './NotFound';
 
 class App extends Component {
   constructor(props) {
@@ -119,7 +118,6 @@ class App extends Component {
                     component={Admin}
                   />
                 </div>}
-              <Route component={NotFound} />
             </Switch>
           </div>
         </BrowserRouter>
