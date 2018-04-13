@@ -118,8 +118,8 @@ class App extends Component {
                     auth={this.props.auth}
                     component={Admin}
                   />
-                  <Route component={NotFound} />
                 </div>}
+              <Route component={NotFound} />
             </Switch>
           </div>
         </BrowserRouter>
