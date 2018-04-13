@@ -103,3 +103,33 @@ export const changePassword = (recoveryString, password) => (dispatch) => {
       }));
     });
 };
+
+export const updateUserDocuments = values => (dispatch) => {
+  dispatch({ type: RESET_ALERT });
+
+  if (!values.identity && !values.residence) {
+    return;
+  }
+
+  const data = new FormData();
+  if (values.identity) {
+    data.append('identity', values.identity);
+  }
+
+  if (values.residence) {
+    data.append('residence', values.residence);
+  }
+
+  axios.post('/api/users/updateDocuments', data)
+    .then((response) => {
+      dispatch(passAlert({
+        message: response.data.message,
+        type: 'success',
+      }));
+    }).catch((error) => {
+      dispatch(passAlert({
+        message: error.response.data.message,
+        type: 'error',
+      }));
+    });
+};

@@ -63,8 +63,7 @@ class Login extends Component {
               <Alert
                 style={{ marginTop: 30 }}
                 {...this.props.alert}
-              />
-            }
+              />}
           </Col>
         </Row>
 

@@ -13,6 +13,7 @@ import Admin from './Admin';
 import BuyRedeem from './BuyRedeem';
 import Checkbox from './Checkbox';
 import PrivateRoute from './PrivateRoute';
+import Account from './Account';
 import Login from './Login';
 import Register from './Register';
 import PasswordRecovery from './PasswordRecovery';
@@ -102,6 +103,12 @@ class App extends Component {
                     path="/buy-redeem"
                     auth={this.props.auth}
                     component={BuyRedeem}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/account"
+                    auth={this.props.auth}
+                    component={Account}
                   />
                   <PrivateRoute
                     exact

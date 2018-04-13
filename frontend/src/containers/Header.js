@@ -12,10 +12,15 @@ const Header = props => (
       </Link>
 
       {props.auth.authenticated &&
-        <Button onClick={props.signoutUser}>
-          <Icon type="logout" />Logout
-        </Button>}
+        <div className="nav">
+          <Button onClick={props.signoutUser}>
+            <Icon type="logout" />Logout
+          </Button>
 
+          <Link href="/account" to="/account">
+            Account
+          </Link>
+        </div>}
       <hr />
     </div>
   </div>
