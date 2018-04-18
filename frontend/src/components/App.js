@@ -11,7 +11,7 @@ import Status from './Status';
 import Home from './Home';
 import Admin from './Admin';
 import BuyRedeem from './BuyRedeem';
-import Intro from './Intro';
+import Agreement from './Agreement';
 import PrivateRoute from './PrivateRoute';
 import Account from './Account';
 import Login from './Login';
@@ -57,7 +57,8 @@ class App extends Component {
         .then(() => {
           this.setState({ deployed: true });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           this.setState({ deployed: false });
         });
     }
@@ -78,7 +79,7 @@ class App extends Component {
             <Header />
 
             <Switch>
-              <Route exact path="/" component={Intro} />
+              <Route exact path="/agreement" component={Agreement} />
               <Route exact path="/login/:userState?" component={Login} />
               <Route exact path="/register" component={Register} />
 

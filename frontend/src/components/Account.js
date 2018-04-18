@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Button, Form, Row, Col, Alert } from 'antd';
@@ -11,16 +10,8 @@ const FormItem = Form.Item;
 class Account extends Component {
   constructor(props) {
     super(props);
-    this.state = { user: null, loading: false };
+    this.state = { loading: false };
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    axios
-      .get('/api/users/me')
-      .then((response) => {
-        this.setState({ user: response.data.user });
-      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,13 +26,25 @@ class Account extends Component {
   }
 
   render() {
+    let residence = 'Loading...';
+    let identity = 'Loading...';
+    let limit = 'Loading...';
+
+    if (this.props.auth.user) {
+      residence = this.props.auth.user.residenceApproved.toUpperCase();
+      identity = this.props.auth.user.identityApproved.toUpperCase();
+      limit = (residence === 'APPROVED' && identity === 'APPROVED') ? '10,000' : '0,00';
+    }
+
     return (
       <div id="account" className="text-center">
         <h2>Verification status:</h2>
 
         <div style={{ margin: '60px 0' }}>
-          <h4>Proof of residence: {this.state.user ? this.state.user.residenceApproved.toUpperCase() : 'Loading...'}</h4>
-          <h4>Identity document: {this.state.user ? this.state.user.identityApproved.toUpperCase() : 'Loading...'}</h4>
+          <h4>Proof of residence: {residence}</h4>
+          <h4>Identity document: {identity}</h4>
+          <br />
+          <h4>Verification Limit: {limit} USD per transaction</h4>
         </div>
 
         <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>

@@ -37,12 +37,11 @@ class Login extends Component {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
     const { redirectToReferrer } = this.state;
     const { match: { params } } = this.props;
 
     if (redirectToReferrer === true) {
-      return <Redirect to={from} />;
+      return <Redirect to="/app" />;
     }
 
     return (

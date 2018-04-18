@@ -183,6 +183,7 @@ class BuyDirect extends Component {
 
 function mapStateToProps(state) {
   return {
+    auth: state.auth,
     LNKSExchange: state.LNKSExchange,
     account: state.account,
     web3: state.web3,

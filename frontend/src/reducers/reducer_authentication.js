@@ -3,14 +3,14 @@ import {
   UNAUTH_USER,
 } from '../actions/types';
 
-export default function (state = { authenticated: false }, action) {
+export default function (state = { authenticated: false, user: null }, action) {
   switch (action.type) {
     case AUTH_USER:
       return {
-        ...state, error: '', authenticated: true,
+        ...state, authenticated: true, user: action.payload,
       };
     case UNAUTH_USER:
-      return { ...state, authenticated: false };
+      return { ...state, authenticated: false, user: null };
     default:
       return state;
   }

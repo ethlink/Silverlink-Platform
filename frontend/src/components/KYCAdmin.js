@@ -8,19 +8,22 @@ const columns = [
     title: 'Full Name', width: 200, dataIndex: 'name', key: 'name',
   },
   {
+    title: 'Email', width: 300, dataIndex: 'email', key: 'email',
+  },
+  {
     title: 'Address', width: 200, dataIndex: 'address', key: 'address',
   },
   {
-    title: 'Postal code', width: 150, dataIndex: 'postalcode', key: 'postalcode',
+    title: 'Postal code', width: 200, dataIndex: 'postalcode', key: 'postalcode',
   },
   {
-    title: 'Country', width: 150, dataIndex: 'country', key: 'country',
+    title: 'Country', width: 200, dataIndex: 'country', key: 'country',
   },
   {
-    title: 'City', width: 150, dataIndex: 'city', key: 'city',
+    title: 'City', width: 200, dataIndex: 'city', key: 'city',
   },
   {
-    title: 'State', width: 150, dataIndex: 'state', key: 'state',
+    title: 'State', width: 200, dataIndex: 'state', key: 'state',
   },
   {
     title: 'Proof of residence',
@@ -47,7 +50,7 @@ class KYCAdmin extends Component {
   }
 
   componentDidMount() {
-    axios.get('/api/users/unverified')
+    axios.get('/api/users/')
       .then((response) => {
         console.log(response);
         this.setState({ users: response.data.users });
@@ -64,6 +67,7 @@ class KYCAdmin extends Component {
     const data = this.state.users.map(user => ({
       key: user.email,
       name: `${user.firstName} ${(user.middleName !== 'undefined' ? user.middleName : '')} ${user.surname}`,
+      email: user.email,
       address: user.address,
       postalcode: user.postalcode,
       country: user.country,
@@ -77,7 +81,7 @@ class KYCAdmin extends Component {
       },
     }));
 
-    return <Table columns={columns} dataSource={data} scroll={{ x: 1500, y: 1000 }} />;
+    return <Table columns={columns} dataSource={data} scroll={{ x: 2000, y: 1000 }} />;
   }
 
   render() {

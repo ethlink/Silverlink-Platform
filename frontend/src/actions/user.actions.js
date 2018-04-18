@@ -13,8 +13,8 @@ export const passAlert = message => ({
 
 export const verifyUserToken = ({ token }) => (dispatch) => {
   axios.post('/api/verifyToken', { token })
-    .then(() => {
-      dispatch({ type: AUTH_USER });
+    .then((response) => {
+      dispatch({ type: AUTH_USER, payload: response.data.user });
     }).catch(() => {
       localStorage.removeItem(token);
       dispatch({ type: UNAUTH_USER });
@@ -26,7 +26,7 @@ export const signinUser = ({ email, password }) => (dispatch) => {
 
   axios.post('/api/signin', { email, password })
     .then((response) => {
-      dispatch({ type: AUTH_USER });
+      dispatch({ type: AUTH_USER, payload: response.data.user });
       localStorage.setItem('token', response.data.token);
     }).catch(() => {
       dispatch(passAlert({

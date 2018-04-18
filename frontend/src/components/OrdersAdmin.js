@@ -86,7 +86,7 @@ class OrdersAdmin extends PureComponent {
             setTimeout(() => {
               this.setState({ loading: false });
               this.hide();
-            }, 10000);
+            }, 30000);
           });
         })
         .catch(() => {
@@ -109,7 +109,7 @@ class OrdersAdmin extends PureComponent {
           setTimeout(() => {
             this.setState({ loading: false });
             this.hide();
-          }, 10000);
+          }, 30000);
         })
         .catch(() => {
           this.setState({ loading: false });

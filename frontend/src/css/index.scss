@@ -2,9 +2,6 @@
 
 html, body { background-color: #1c2e4d !important; }
 
-input { color: #000 !important; }
-.ant-modal-close-x { display: none; }
-
 #root { color: #f9f9f9; font-family: 'Montserrat';
 	h1, h2, h3, h4, h5, h6, p { color: #f9f9f9; font-weight: 300; }
 	h1 { margin-top: 30px; }
@@ -20,6 +17,10 @@ input { color: #000 !important; }
 	.ant-btn-primary { background-color: #64b0ed !important; border-color: #64b0ed !important; }
 	.ant-upload-list-item { background: #fff; border-radius: 3px; }
 	.has-error .ant-form-explain { margin-top: 5px; }
+
+	input { color: #000 !important; }
+	.ant-modal-close-x { display: none; }
+	.ant-btn:disabled, .ant-btn.disabled, button:disabled { background: #dddddd !important; color: #1c2e4d !important; border-color: #1c2e4d !important; }
 }
 
 #header {

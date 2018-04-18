@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 export default () => {
   axios.interceptors.request.use((requestConfig) => {
     const newRequestConfig = requestConfig;
@@ -8,5 +9,8 @@ export default () => {
     }
 
     return newRequestConfig;
-  }, error => Promise.reject(error));
+  }, (error) => {
+    Promise.reject(error);
+    console.log('NOOO');
+  });
 };

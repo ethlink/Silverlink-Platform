@@ -5,7 +5,7 @@ import appImg from '../img/app.jpg';
 import Terms from './Terms';
 import Instructions from './Instructions';
 
-class Intro extends Component {
+class Agreement extends Component {
   constructor(props) {
     super(props);
     this.state = { termsVisible: true, instructionsVisible: false, redirect: false };
@@ -41,4 +41,4 @@ class Intro extends Component {
   }
 }
 
-export default Intro;
+export default Agreement;
