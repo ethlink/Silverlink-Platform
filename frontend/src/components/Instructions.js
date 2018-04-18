@@ -18,27 +18,18 @@ const Instructions = props => (
     ]}
     visible={props.visible}
   >
-    <p>In order to use this application you need <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">Metamask</a> Extension.</p>
+    <h1>Performing an action:</h1>
 
-    <h3>How to Use Metamask:</h3>
-
-    <p>1. Download and install <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">Metamask</a> extension.</p>
-
-    <p>2. Now that you are connected into Rinkeby Test Network you need some Rinkeby Ether. Fortunately, you can get it for free just by completing a social network <a href="https://faucet.rinkeby.io/" target="_blank" rel="noopener noreferrer">challenge</a>. Now you are ready to use Link Platform.</p>
-
-    <h3>Performing an action:</h3>
-
-    <p>1. For each time you perform an action inside Link;
+    <p>1. For each time you perform an action inside Silverlink;
   a Metamask transaction will be created.
     </p>
 
     <p>2: Click <b>Submit</b> to send the transaction, then
-  the order will reach the Curators board and they will need to approve it,
-  this normally takes 12 hours after you have submitted it.
+  the order will reach the Curators board and it will be approved in the next 12 hours.
     </p>
 
     <p>3. After your order has been approved, your balance will automatically be
-  reflected into your account in you used <b>-Direct Buy-</b> and in the case of
+  reflected into your account for <b>-Direct Buy-</b> and in the case of
       <b>-Redeeming-</b> the amount of Tokens will be deducted from your balance
   accordingly.
     </p>
