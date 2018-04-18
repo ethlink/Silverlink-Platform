@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message, Form, Input, Button } from 'antd';
+import config from '../config';
 
 const FormItem = Form.Item;
 
@@ -44,8 +45,8 @@ class Redeem extends Component {
       exchange.redeem(
         this.state.amount * 1000,
         `${this.state.name} | ${this.state.street} | ${this.state.city} | ${this.state.state} | ${this.state.zip} | ${this.state.country}`, {
-          from: this.props.account,
-          gas: 300000,
+          gas: config.GAS_LIMIT,
+          gasPrice: config.GWEI_PRICE,
         },
       ).then((receipt) => {
         // eslint-disable-next-line

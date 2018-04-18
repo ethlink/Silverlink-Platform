@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import _ from 'lodash';
 import { message, Table, Divider, Form, Input, Button } from 'antd';
+import config from '../config';
 
 const { Column } = Table;
 
@@ -79,7 +80,8 @@ class OrdersAdmin extends PureComponent {
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.approveOrder(idx, parseInt(this.state.inputs[idx], 10) * 1000, {
         from: this.props.account,
-        gas: 200000,
+        gas: config.GAS_LIMIT,
+        gasPrice: config.GWEI_PRICE,
       })
         .then(() => {
           this.fetchOrders(() => {
@@ -103,7 +105,8 @@ class OrdersAdmin extends PureComponent {
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.declineOrder(idx, {
         from: this.props.account,
-        gas: 200000,
+        gas: config.GAS_LIMIT,
+        gasPrice: config.GWEI_PRICE,
       })
         .then(() => {
           setTimeout(() => {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message, Table, Form, Input, Button } from 'antd';
 import _ from 'lodash';
+import config from '../config';
 
 const { Column } = Table;
 
@@ -39,7 +40,8 @@ class CertificatesAdmin extends Component {
         this.state.amount * 1000,
         {
           from: this.props.account,
-          gas: 300000,
+          gas: config.GAS_LIMIT,
+          gasPrice: config.GWEI_PRICE,
         },
       ).then(() => {
         setTimeout(() => {
@@ -115,7 +117,8 @@ class CertificatesAdmin extends Component {
         key,
         {
           from: this.props.account,
-          gas: 300000,
+          gas: config.GAS_LIMIT,
+          gasPrice: config.GWEI_PRICE,
         },
       ).then(() => {
         this.fetchCertificates(() => {

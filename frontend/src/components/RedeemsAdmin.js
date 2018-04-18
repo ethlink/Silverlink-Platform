@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { message, Table, Divider, Button } from 'antd';
 import _ from 'lodash';
+import config from '../config';
 
 const { Column } = Table;
 
@@ -70,7 +71,8 @@ class RedeemsAdmin extends Component {
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.approveRedemption(idx, {
         from: this.props.account,
-        gas: 250000,
+        gas: config.GAS_LIMIT,
+        gasPrice: config.GWEI_PRICE,
       })
         .then(() => {
           this.fetchRedemptions(() => {
@@ -94,7 +96,8 @@ class RedeemsAdmin extends Component {
     this.props.LNKSExchange.deployed().then((exchange) => {
       exchange.declineRedemption(idx, {
         from: this.props.account,
-        gas: 250000,
+        gas: config.GAS_LIMIT,
+        gasPrice: config.GWEI_PRICE,
       })
         .then(() => {
           this.fetchRedemptions(() => {

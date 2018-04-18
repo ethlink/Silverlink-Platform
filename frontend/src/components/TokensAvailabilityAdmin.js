@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, Input, Button } from 'antd';
-
+import config from '../config';
 
 class CertificatesAdmin extends Component {
   constructor() {
@@ -35,7 +35,8 @@ class CertificatesAdmin extends Component {
         this.state.amount * 1000,
         {
           from: this.props.account,
-          gas: 300000,
+          gas: config.GAS_LIMIT,
+          gasPrice: config.GWEI_PRICE,
         },
       ).then((receipt) => {
         // eslint-disable-next-line

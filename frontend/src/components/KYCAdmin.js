@@ -52,7 +52,6 @@ class KYCAdmin extends Component {
   componentDidMount() {
     axios.get('/api/users/')
       .then((response) => {
-        console.log(response);
         this.setState({ users: response.data.users });
       }).catch((error) => {
         console.log(error, error.response);

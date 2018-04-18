@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message, Form, Input, Button } from 'antd';
 import axios from 'axios';
+import config from '../config';
 
 const FormItem = Form.Item;
 
@@ -112,7 +113,8 @@ class BuyDirect extends Component {
       exchange.buyDirect({
         from: this.props.account,
         value: this.props.web3.web3.toWei(this.state.amountEth, 'ether'),
-        gas: 200000,
+        gas: config.GAS_LIMIT,
+        gasPrice: config.GWEI_PRICE,
       }).then((receipt) => {
         this.hide();
         this.setState({ success: `Success! Transaction hash - ${receipt.tx}`, loading: false });
