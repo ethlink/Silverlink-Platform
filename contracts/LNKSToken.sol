@@ -83,9 +83,9 @@ contract StandardToken is ERC20 {
 
 
 contract LNKSToken is StandardToken, OwnableMultiple {
-  string public constant NAME = "Link Platform";
-  string public constant SYMBOL = "LNKS";
-  uint public constant DECIMALS = 3;
+  string public constant name = "Link Platform";
+  string public constant symbol = "LNKS";
+  uint public constant decimals = 3;
 
   function mint(address _spender, uint _value) public onlyOwner {
     balances[_spender] += _value;
